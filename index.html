@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TacticalYogurt — Print Farm Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #0a0c10;
+      --bg2:       #0f1117;
+      --card:      #13171f;
+      --border:    rgba(255,255,255,0.07);
+      --blue:      #3b6aff;
+      --blue-glow: rgba(59,106,255,0.25);
+      --green:     #2fd87a;
+      --text:      #e8ecf4;
+      --muted:     #6b7280;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Figtree', sans-serif;
+      --display:   'Outfit', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: .4;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; gap: 0;
+      padding: 0 2rem; height: 64px;
+      background: rgba(10,12,16,.92); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: .6rem; font-family: var(--display); font-weight: 600; font-size: 1rem; letter-spacing: -.01em; color: var(--text); text-decoration: none; white-space: nowrap; flex-shrink: 0; }
+    .nav-dot { width: 8px; height: 8px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 10px var(--blue); animation: pulse 2.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(.8)} }
+    .nav-divider { width: 1px; height: 20px; background: var(--border); margin: 0 1.5rem; flex-shrink: 0; }
+    .nav-links { display: flex; gap: 0; list-style: none; flex: 1; align-items: center; justify-content: space-evenly; }
+    .nav-links li { flex: 1; display: flex; justify-content: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .8rem; padding: .35rem .5rem; border-radius: 6px; transition: color .2s, background .2s; white-space: nowrap; text-align: center; }
+    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,.05); }
+    .nav-links a.active { color: var(--text); }
+    .nav-cta { background: var(--blue); color: #fff; padding: .45rem 1.1rem; border-radius: 6px; font-size: .8rem; font-weight: 500; text-decoration: none; transition: background .2s, box-shadow .2s; white-space: nowrap; flex-shrink: 0; margin-left: 1rem; }
+    .nav-cta:hover { background: #4d7aff; box-shadow: 0 0 20px var(--blue-glow); }
+    /* Mobile hamburger */
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: .5rem; margin-left: auto; }
+    .nav-hamburger span { display: block; width: 20px; height: 2px; background: var(--muted); border-radius: 2px; transition: all .3s; }
+    .nav-mobile { display: none; position: fixed; top: 64px; left: 0; right: 0; background: rgba(10,12,16,.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 1rem 2rem 1.5rem; flex-direction: column; gap: .25rem; z-index: 99; }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a { color: var(--muted); text-decoration: none; font-size: .9rem; padding: .6rem .75rem; border-radius: 6px; transition: color .2s, background .2s; }
+    .nav-mobile a:hover { color: var(--text); background: rgba(255,255,255,.05); }
+    .nav-mobile .nav-cta { text-align: center; margin-top: .5rem; }
+
+    /* HERO */
+    .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 8rem 2rem 5rem; overflow: hidden; }
+    .hero::after {
+      content: ''; position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(59,106,255,.04) 1px,transparent 1px), linear-gradient(90deg,rgba(59,106,255,.04) 1px,transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%,black 30%,transparent 100%);
+      pointer-events: none;
+    }
+    .hero-glow { position: absolute; width: 700px; height: 400px; background: radial-gradient(ellipse,rgba(59,106,255,.18) 0%,transparent 70%); top: 10%; left: 50%; transform: translateX(-50%); pointer-events: none; filter: blur(40px); }
+    .hero-badge { display: inline-flex; align-items: center; gap: .5rem; background: rgba(59,106,255,.12); border: 1px solid rgba(59,106,255,.3); color: #7da4ff; font-family: var(--mono); font-size: .75rem; padding: .35rem .85rem; border-radius: 100px; margin-bottom: 1.75rem; letter-spacing: .05em; animation: fadeUp .6s ease both; }
+    .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 6px var(--blue); }
+    h1 { font-family: var(--display); font-size: clamp(2rem,5vw,3.75rem); font-weight: 700; line-height: 1.1; letter-spacing: -.025em; max-width: 820px; animation: fadeUp .7s .1s ease both; }
+    h1 span { background: linear-gradient(135deg,#3b6aff 0%,#7da4ff 50%,#a0c0ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-sub { margin-top: 1.5rem; font-size: 1.1rem; color: var(--muted); max-width: 540px; font-weight: 300; line-height: 1.75; animation: fadeUp .7s .2s ease both; }
+    .hero-actions { display: flex; gap: 1rem; margin-top: 2.5rem; animation: fadeUp .7s .3s ease both; flex-wrap: wrap; justify-content: center; }
+    .btn-primary { background: var(--blue); color: #fff; padding: .8rem 2rem; border-radius: 8px; font-weight: 500; font-size: .95rem; text-decoration: none; transition: all .2s; box-shadow: 0 4px 24px rgba(59,106,255,.4); }
+    .btn-primary:hover { background: #4d7aff; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(59,106,255,.5); }
+    .btn-ghost { background: transparent; color: var(--text); padding: .8rem 2rem; border-radius: 8px; font-size: .95rem; text-decoration: none; border: 1px solid var(--border); transition: all .2s; }
+    .btn-ghost:hover { border-color: rgba(255,255,255,.2); background: rgba(255,255,255,.04); }
+
+    /* STATS */
+    .stats-strip { display: flex; justify-content: center; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg2); flex-wrap: wrap; }
+    .stat-item { padding: 1.75rem 3rem; text-align: center; border-right: 1px solid var(--border); flex: 1; min-width: 150px; }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-family: var(--display); font-size: 1.6rem; font-weight: 600; }
+    .stat-label { font-size: .7rem; color: var(--muted); margin-top: .25rem; letter-spacing: .06em; text-transform: uppercase; }
+
+    /* PHOTO BREAK */
+    .photo-break { position: relative; z-index: 1; width: 100%; height: 420px; overflow: hidden; }
+    .photo-break img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; filter: brightness(.4) saturate(.65); }
+    .photo-break-overlay { position: absolute; inset: 0; background: linear-gradient(to right,rgba(10,12,16,1) 0%,rgba(10,12,16,.25) 35%,rgba(10,12,16,.25) 65%,rgba(10,12,16,1) 100%), linear-gradient(to bottom,rgba(10,12,16,.5) 0%,transparent 20%,transparent 80%,rgba(10,12,16,.7) 100%); display: flex; align-items: center; justify-content: center; }
+    .photo-break-text { text-align: center; padding: 0 2rem; }
+    .photo-break-text h2 { font-family: var(--display); font-size: clamp(1.3rem,3vw,2rem); font-weight: 600; letter-spacing: -.02em; line-height: 1.2; margin-bottom: .75rem; }
+    .photo-break-text p { color: var(--muted); font-size: 1rem; max-width: 500px; margin: 0 auto; }
+
+    /* WRAP */
+    .wrap { position: relative; z-index: 1; padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-label { font-family: var(--mono); font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--blue); margin-bottom: .75rem; }
+    .section-title { font-family: var(--display); font-size: clamp(1.4rem,3vw,2rem); font-weight: 600; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 1rem; }
+    .section-sub { color: var(--muted); font-size: 1rem; max-width: 520px; line-height: 1.75; }
+
+    /* FEATURE CATEGORIES */
+    .feat-cat { margin-bottom: 3.5rem; }
+    .cat-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+    .cat-icon { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .cat-name { font-family: var(--display); font-size: 1rem; font-weight: 600; letter-spacing: -.01em; }
+    .feat-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(290px,1fr)); gap: .75rem; }
+    .feat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; transition: border-color .2s, background .2s; }
+    .feat-card:hover { border-color: rgba(59,106,255,.3); background: #161b25; }
+    .feat-title { font-size: .875rem; font-weight: 600; margin-bottom: .3rem; }
+    .feat-desc { font-size: .8rem; color: var(--muted); line-height: 1.6; }
+
+    /* SPLIT */
+    .split { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .split-img { border-radius: 14px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 24px 60px rgba(0,0,0,.5); aspect-ratio: 4/3; }
+    .split-img img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.7) saturate(.8); display: block; }
+    .split-content ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; margin-top: 1.25rem; }
+    .split-content ul li { font-size: .875rem; color: var(--muted); padding-left: 1.1rem; position: relative; line-height: 1.55; }
+    .split-content ul li::before { content: '→'; position: absolute; left: 0; color: var(--blue); font-size: .75rem; top: 2px; }
+
+    /* INTEGRATIONS */
+    .chips { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+    .chip { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: .6rem 1.1rem; font-size: .825rem; font-family: var(--mono); color: var(--muted); transition: all .2s; }
+    .chip:hover { border-color: rgba(59,106,255,.4); color: var(--text); }
+
+    /* DASHBOARD PREVIEW */
+    .preview-wrap { border-radius: 14px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 32px 80px rgba(0,0,0,.6); margin-top: 3rem; }
+    .preview-bar { background: #0f1117; padding: .75rem 1rem; display: flex; align-items: center; gap: .5rem; border-bottom: 1px solid var(--border); }
+    .pdot { width: 10px; height: 10px; border-radius: 50%; }
+    .purl { background: rgba(255,255,255,.05); border: 1px solid var(--border); border-radius: 6px; padding: .25rem 1rem; font-family: var(--mono); font-size: .7rem; color: var(--muted); margin-left: .5rem; }
+
+    /* STEPS */
+    .steps { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 2rem; margin-top: 3.5rem; }
+    .step { position: relative; padding-left: 1rem; }
+    .step::before { content: ''; position: absolute; left: 0; top: 4px; width: 2px; height: calc(100% - 4px); background: linear-gradient(to bottom,var(--blue),transparent); border-radius: 2px; }
+    .step-num { font-family: var(--mono); font-size: .7rem; color: var(--blue); letter-spacing: .1em; margin-bottom: .75rem; }
+    .step-title { font-family: var(--display); font-size: .975rem; font-weight: 600; margin-bottom: .4rem; }
+    .step-desc { font-size: .85rem; color: var(--muted); line-height: 1.65; }
+
+    /* PRICING */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 1.25rem; margin-top: 3.5rem; }
+    .pricing-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; position: relative; }
+    .pricing-card.featured { border-color: var(--blue); background: linear-gradient(160deg,rgba(59,106,255,.08),var(--card)); }
+    .pricing-card.featured::before { content: 'Most Popular'; position: absolute; top: -1px; right: 1.5rem; background: var(--blue); color: #fff; font-size: .65rem; font-family: var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: .25rem .75rem; border-radius: 0 0 6px 6px; }
+    .tier { font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: .75rem; }
+    .price { font-family: var(--display); font-size: 2rem; font-weight: 700; letter-spacing: -.03em; }
+    .price span { font-size: 1rem; color: var(--muted); font-family: var(--sans); font-weight: 400; }
+    .price-desc { font-size: .85rem; color: var(--muted); margin: .75rem 0 1.5rem; line-height: 1.6; }
+    .price-feats { list-style: none; display: flex; flex-direction: column; gap: .65rem; margin-bottom: 2rem; }
+    .price-feats li { font-size: .875rem; display: flex; align-items: flex-start; gap: .6rem; }
+    .price-feats li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .pbtn { display: block; text-align: center; padding: .75rem; border-radius: 8px; font-size: .9rem; font-weight: 500; text-decoration: none; transition: all .2s; }
+    .pbtn.out { border: 1px solid var(--border); color: var(--text); }
+    .pbtn.out:hover { border-color: rgba(255,255,255,.2); background: rgba(255,255,255,.04); }
+    .pbtn.sol { background: var(--blue); color: #fff; box-shadow: 0 4px 20px rgba(59,106,255,.35); }
+    .pbtn.sol:hover { background: #4d7aff; transform: translateY(-1px); }
+
+    /* CTA */
+    .cta-wrap { margin: 2rem auto 6rem; max-width: 1100px; padding: 0 2rem; }
+    .cta-banner { background: linear-gradient(135deg,#0f1730,#0a0c10); border: 1px solid rgba(59,106,255,.3); border-radius: 16px; padding: 4rem 3rem; text-align: center; position: relative; overflow: hidden; }
+    .cta-banner::before { content: ''; position: absolute; width: 500px; height: 300px; background: radial-gradient(ellipse,rgba(59,106,255,.2),transparent 70%); top: -80px; left: 50%; transform: translateX(-50%); filter: blur(30px); pointer-events: none; }
+    .cta-title { font-family: var(--display); font-size: clamp(1.4rem,3vw,2.2rem); font-weight: 600; letter-spacing: -.02em; margin-bottom: 1rem; }
+    .cta-sub { color: var(--muted); font-size: 1rem; margin-bottom: 2rem; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); background: var(--bg2); padding: 2.5rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-brand { font-family: var(--display); font-weight: 600; font-size: .9rem; }
+    .footer-copy { font-size: .8rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a { font-size: .8rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* COMPARISON TABLE */
+    .compare-table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: .825rem; }
+    .compare-table thead tr { background: #0d1018; }
+    .compare-table th { padding: 1.25rem 1rem; text-align: center; border-bottom: 1px solid var(--border); vertical-align: bottom; }
+    .compare-table th.feat-col { width: 38%; text-align: left; }
+    .compare-table th.th-featured { background: rgba(59,106,255,.07); border-left: 1px solid rgba(59,106,255,.25); border-right: 1px solid rgba(59,106,255,.25); position: relative; }
+    .th-tier { font-family: var(--display); font-weight: 600; font-size: .85rem; color: var(--text); margin-bottom: .2rem; }
+    .th-price { font-family: var(--display); font-size: 1.4rem; font-weight: 700; color: var(--text); letter-spacing: -.02em; }
+    .th-price span { font-size: .75rem; color: var(--muted); font-family: var(--sans); font-weight: 400; }
+    .th-badge { display: inline-block; background: var(--blue); color: #fff; font-size: .6rem; font-family: var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: .2rem .6rem; border-radius: 100px; margin-bottom: .6rem; }
+    .compare-table td { padding: .85rem 1rem; text-align: center; border-bottom: 1px solid var(--border); color: var(--muted); font-size: .825rem; vertical-align: middle; }
+    .compare-table td.feat-col, .compare-table td.feat-name { text-align: left; color: var(--text); font-size: .825rem; }
+    .compare-table td.col-featured { background: rgba(59,106,255,.04); border-left: 1px solid rgba(59,106,255,.15); border-right: 1px solid rgba(59,106,255,.15); color: var(--text); }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: rgba(255,255,255,.02); }
+    .compare-table tr:hover td.col-featured { background: rgba(59,106,255,.08); }
+    .group-row td { background: #0d1018 !important; color: var(--muted); font-family: var(--mono); font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; padding: .7rem 1rem; border-bottom: 1px solid var(--border); }
+    .yes { color: var(--green); font-size: 1rem; font-weight: 600; }
+    .no { color: #374151; font-size: .9rem; }
+    .cta-row td { padding: 1.25rem 1rem; background: #0d1018 !important; }
+    .cta-row td.col-featured { background: rgba(59,106,255,.07) !important; border-left: 1px solid rgba(59,106,255,.25); border-right: 1px solid rgba(59,106,255,.25); }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .split { grid-template-columns: 1fr; gap: 2rem; padding-bottom: 3rem; }
+      .wrap { padding: 4rem 1.25rem; }
+      .photo-break { height: 280px; }
+      .stat-item { min-width: 130px; padding: 1.25rem 1rem; }
+      footer { flex-direction: column; text-align: center; }
+      .cta-banner { padding: 2.5rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><div class="nav-dot"></div>TacticalYogurt</a>
+  <div class="nav-divider"></div>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#features">Inventory</a></li>
+    <li><a href="#features">Fleet</a></li>
+    <li><a href="#features">Jobs</a></li>
+    <li><a href="#integrations">Integrations</a></li>
+    <li><a href="#how-it-works">How it Works</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#compare">Compare Plans</a></li>
+  </ul>
+  <div class="nav-divider"></div>
+  <a href="#pricing" class="nav-cta">Get Started</a>
+  <!-- Mobile hamburger -->
+  <div class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE NAV DRAWER -->
+<div class="nav-mobile" id="mobileMenu">
+  <a href="#" onclick="closeMenu()">Home</a>
+  <a href="#features" onclick="closeMenu()">Features</a>
+  <a href="#integrations" onclick="closeMenu()">Integrations</a>
+  <a href="#how-it-works" onclick="closeMenu()">How it Works</a>
+  <a href="#pricing" onclick="closeMenu()">Pricing</a>
+  <a href="#compare" onclick="closeMenu()">Compare Plans</a>
+  <a href="#pricing" class="nav-cta" onclick="closeMenu()">Get Started</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <span class="hero-badge">3D Print Farm Management — Simplified</span>
+  <h1>Command your<br><span>print farm.</span><br>Not your spreadsheets.</h1>
+  <p class="hero-sub">TacticalYogurt is the all-in-one operations platform for 3D print farms — track filament, manage printers, fulfill orders, and grow your business from a single dashboard.</p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-primary">Start Free Trial</a>
+    <a href="#features" class="btn-ghost">Explore Features →</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat-item"><div class="stat-num">∞</div><div class="stat-label">Spools Tracked</div></div>
+  <div class="stat-item"><div class="stat-num">14+</div><div class="stat-label">Feature Modules</div></div>
+  <div class="stat-item"><div class="stat-num">5+</div><div class="stat-label">Market Integrations</div></div>
+  <div class="stat-item"><div class="stat-num">Real-time</div><div class="stat-label">Low Stock Alerts</div></div>
+</div>
+
+<!-- PHOTO BREAK: PRINT FARM -->
+<div class="photo-break">
+  <img src="https://i0.wp.com/all3dp.com/wp-content/uploads/2020/05/3d-printing-farm-hero.jpg" alt="3D print farm" onerror="this.src='https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=1400&q=80'" />
+  <div class="photo-break-overlay">
+    <div class="photo-break-text fade-in">
+      <h2>Built for farms of every size.</h2>
+      <p>Whether you run 2 printers or 200, TacticalYogurt scales with your operation — from hobbyist side hustle to full-scale production floor.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="wrap" id="features">
+  <div class="fade-in">
+    <div class="section-label">// features</div>
+    <h2 class="section-title">Everything your farm needs.<br>Nothing it doesn't.</h2>
+    <p class="section-sub">Purpose-built for print farm operators who need more than a shared spreadsheet.</p>
+  </div>
+
+  <!-- Inventory -->
+  <div class="feat-cat fade-in" style="margin-top:3rem;">
+    <div class="cat-header">
+      <div class="cat-icon" style="background:rgba(59,106,255,.15)">🧵</div>
+      <div class="cat-name">Inventory Management</div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-title">Filament Tracking</div><div class="feat-desc">Every spool tracked by brand, material, color, weight remaining, cost, and location. Progress bars show remaining percentage at a glance.</div></div>
+      <div class="feat-card"><div class="feat-title">Hardware Inventory</div><div class="feat-desc">Screws, inserts, bearings, and small parts tracked by category, spec, quantity, and cost per unit.</div></div>
+      <div class="feat-card"><div class="feat-title">Printer Spare Parts</div><div class="feat-desc">Nozzles, build plates, belts, thermistors, and 16 other part categories — tracked separately with printer compatibility mapping.</div></div>
+      <div class="feat-card"><div class="feat-title">Low Stock Alerts</div><div class="feat-desc">Automatic detection when any item drops below its threshold. Configurable globally and per-item.</div></div>
+      <div class="feat-card"><div class="feat-title">Barcode / QR Scanning</div><div class="feat-desc">Scan a spool's barcode to auto-fill details from a learned product database. Hardware gets QR codes (HW-{id}) for quick lookup.</div></div>
+      <div class="feat-card"><div class="feat-title">Stock Audit Trail</div><div class="feat-desc">Full ledger of every addition, removal, and adjustment with timestamps and user attribution. Undo support for mistakes.</div></div>
+    </div>
+  </div>
+
+  <!-- Printer Fleet -->
+  <div class="feat-cat fade-in">
+    <div class="cat-header">
+      <div class="cat-icon" style="background:rgba(255,140,66,.15)">🖨️</div>
+      <div class="cat-name">Printer Fleet Management</div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-title">Printer Profiles</div><div class="feat-desc">Name, model, nozzle specs, bed dimensions, enclosure status, multi-material capability, and compatible materials per printer.</div></div>
+      <div class="feat-card"><div class="feat-title">ROI Tracking</div><div class="feat-desc">Purchase price, revenue generated, payoff progress bar, and estimated payoff date per printer. Know when each machine pays for itself.</div></div>
+      <div class="feat-card"><div class="feat-title">Quick Start Profiles</div><div class="feat-desc">Pre-built specs for Bambu Lab, Prusa, Creality, Snapmaker, and other popular printers — setup in seconds.</div></div>
+      <div class="feat-card"><div class="feat-title">Parts Compatibility</div><div class="feat-desc">Link specific spare parts to specific printers so you always know what fits what before you order.</div></div>
+    </div>
+  </div>
+
+  <!-- Print Job Workflow -->
+  <div class="feat-cat fade-in">
+    <div class="cat-header">
+      <div class="cat-icon" style="background:rgba(47,216,122,.15)">⚙️</div>
+      <div class="cat-name">Print Job Workflow</div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-title">Job Logging</div><div class="feat-desc">Record which file printed on which printer using which spools — with start/end times and outcome tracking (success, partial, failure).</div></div>
+      <div class="feat-card"><div class="feat-title">Smart Recommendations</div><div class="feat-desc">The system ranks available spools and printers by material match, stock level, and past ratings for every job.</div></div>
+      <div class="feat-card"><div class="feat-title">Spool Weight Check-In</div><div class="feat-desc">After a job, enter gross spool weight. The system subtracts tare to automatically update remaining filament.</div></div>
+      <div class="feat-card"><div class="feat-title">Job Ratings</div><div class="feat-desc">Rate each job 1–5 stars on quality, filament performance, and dimensional accuracy. Feeds the recommendation engine over time.</div></div>
+    </div>
+  </div>
+
+  <!-- Print File Management -->
+  <div class="feat-cat fade-in">
+    <div class="cat-header">
+      <div class="cat-icon" style="background:rgba(59,106,255,.15)">📁</div>
+      <div class="cat-name">Print File Management</div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-title">3MF Parsing</div><div class="feat-desc">Upload .3mf files and auto-extract printer profile, filament requirements per extruder slot, estimated duration, and usage in grams.</div></div>
+      <div class="feat-card"><div class="feat-title">Version Tracking</div><div class="feat-desc">Upload updated versions of the same file. Deduplication by SHA-256 hash ensures no duplicates slip through.</div></div>
+      <div class="feat-card"><div class="feat-title">Bill of Materials</div><div class="feat-desc">Link which printed parts and hardware items each file produces or requires, with quantities per run.</div></div>
+      <div class="feat-card"><div class="feat-title">Cost Calculation</div><div class="feat-desc">Filament + hardware + labor + printer time = total cost per print. Know your margin before you hit start.</div></div>
+    </div>
+  </div>
+
+  <!-- Orders & Customers -->
+  <div class="feat-cat fade-in">
+    <div class="cat-header">
+      <div class="cat-icon" style="background:rgba(255,140,66,.15)">📦</div>
+      <div class="cat-name">Orders & Customer Management</div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-title">Order Tracking</div><div class="feat-desc">Orders from Shopify, Etsy, WooCommerce, Square, or manual entry. Status flows from new through fulfilled.</div></div>
+      <div class="feat-card"><div class="feat-title">Customer Records</div><div class="feat-desc">Full order history and total spend per customer. Identified by external platform ID — no PII stored.</div></div>
+      <div class="feat-card"><div class="feat-title">Revenue Attribution</div><div class="feat-desc">Fulfilled order revenue flows back to the printer that produced the parts, feeding per-machine ROI calculation.</div></div>
+      <div class="feat-card"><div class="feat-title">Parts Pricing & MSRP</div><div class="feat-desc">Cost-based MSRP auto-calculated with per-part markup overrides. Dashboard shows total potential revenue across all stock.</div></div>
+    </div>
+  </div>
+
+  <!-- Tasks, Markets, Subscriptions -->
+  <div class="feat-cat fade-in">
+    <div class="cat-header">
+      <div class="cat-icon" style="background:rgba(47,216,122,.15)">📋</div>
+      <div class="cat-name">Tasks, Markets & Subscriptions</div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-title">Auto-Generated Tasks</div><div class="feat-desc">Low stock filament, hardware, and overdue jobs surface automatically. Manual tasks with due dates and user assignment also supported.</div></div>
+      <div class="feat-card"><div class="feat-title">Market Event Tracking</div><div class="feat-desc">Track craft fairs and pop-up shops with dates, location, vendor fees, packing wishlists, and quick order creation.</div></div>
+      <div class="feat-card"><div class="feat-title">Creator Subscriptions</div><div class="feat-desc">Track Patreon, MyMiniFactory, and Cults3D subscriptions with cost and associated files. Profitability leaderboard shows ROI per creator.</div></div>
+      <div class="feat-card"><div class="feat-title">Reporting & Analytics</div><div class="feat-desc">Filament usage, hardware consumption, labor hours, and subscription costs — filterable by date range, material, brand, or item.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SPLIT: PRINTED PARTS PHOTO -->
+<div class="split fade-in">
+  <div class="split-img">
+    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&q=80" alt="3D printed parts" onerror="this.src='https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=800&q=80'" />
+  </div>
+  <div class="split-content">
+    <div class="section-label">// printed parts & pricing</div>
+    <h2 class="section-title" style="font-size:clamp(1.3rem,2.5vw,1.9rem)">Know your margin<br>on every part.</h2>
+    <ul>
+      <li>Auto-calculates MSRP from filament, hardware, labor, and printer time</li>
+      <li>Tracks finished parts inventory with stock levels, images, and channel SKUs</li>
+      <li>Dashboard shows total potential revenue across all parts in stock</li>
+      <li>Production auto-updates inventory when a job completes</li>
+      <li>Per-part markup overrides for flexible pricing strategies</li>
+    </ul>
+  </div>
+</div>
+
+<!-- INTEGRATIONS -->
+<div class="wrap" id="integrations" style="padding-top:0;">
+  <div class="fade-in">
+    <div class="section-label">// integrations</div>
+    <h2 class="section-title">Connects where<br>you already sell.</h2>
+    <p class="section-sub">OAuth connections with automatic order sync and SKU matching. Set it once, forget it forever.</p>
+    <div class="chips">
+      <div class="chip">Shopify</div>
+      <div class="chip">Etsy</div>
+      <div class="chip">WooCommerce</div>
+      <div class="chip">Square</div>
+      <div class="chip">Patreon</div>
+      <div class="chip">MyMiniFactory</div>
+      <div class="chip">Cults3D</div>
+      <div class="chip">Bambu Lab</div>
+      <div class="chip">Prusa</div>
+      <div class="chip">Creality</div>
+      <div class="chip">Snapmaker</div>
+    </div>
+  </div>
+
+  <!-- Dashboard preview -->
+  <div class="preview-wrap fade-in">
+    <div class="preview-bar">
+      <div class="pdot" style="background:#ff5f57"></div>
+      <div class="pdot" style="background:#febc2e"></div>
+      <div class="pdot" style="background:#28c840"></div>
+      <div class="purl">app.tacticalyogurt.com/dashboard</div>
+    </div>
+    <div style="background:#0f1117;padding:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
+      <div style="flex:1;min-width:120px;background:#13171f;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:1.25rem;"><div style="font-size:.7rem;color:#6b7280;margin-bottom:.5rem;">Total Spools</div><div style="font-family:'Syne',sans-serif;font-size:1.75rem;font-weight:800;">24</div></div>
+      <div style="flex:1;min-width:120px;background:#13171f;border:1px solid rgba(255,80,80,.2);border-radius:10px;padding:1.25rem;"><div style="font-size:.7rem;color:#6b7280;margin-bottom:.5rem;">Low Stock</div><div style="font-family:'Syne',sans-serif;font-size:1.75rem;font-weight:800;color:#ff6060;">3</div><div style="font-size:.7rem;color:#ff6060;margin-top:.4rem;">View low stock items →</div></div>
+      <div style="flex:1;min-width:120px;background:#13171f;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:1.25rem;"><div style="font-size:.7rem;color:#6b7280;margin-bottom:.5rem;">Total Value</div><div style="font-family:'Syne',sans-serif;font-size:1.75rem;font-weight:800;">$412.80</div></div>
+      <div style="flex:1;min-width:120px;background:#13171f;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:1.25rem;"><div style="font-size:.7rem;color:#6b7280;margin-bottom:.5rem;">Total Weight</div><div style="font-family:'Syne',sans-serif;font-size:1.75rem;font-weight:800;">18.2 kg</div></div>
+      <div style="flex:1;min-width:120px;background:#13171f;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:1.25rem;"><div style="font-size:.7rem;color:#6b7280;margin-bottom:.5rem;">Hardware Value</div><div style="font-family:'Syne',sans-serif;font-size:1.75rem;font-weight:800;">$87.40</div></div>
+    </div>
+    <div style="background:#0f1117;padding:0 1.5rem 1.5rem;">
+      <div style="background:#13171f;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:1.5rem;">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:.25rem;">Inventory by Material</div>
+        <div style="font-size:.8rem;color:#6b7280;margin-bottom:1.25rem;">Distribution of your filament stock</div>
+        <div style="margin-bottom:.85rem;"><div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.35rem;"><span>PLA</span><span style="color:#6b7280;">12 spools</span></div><div style="height:4px;background:rgba(255,255,255,.06);border-radius:4px;"><div style="height:100%;width:80%;background:linear-gradient(90deg,#3b6aff,#7da4ff);border-radius:4px;"></div></div></div>
+        <div style="margin-bottom:.85rem;"><div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.35rem;"><span>PETG</span><span style="color:#6b7280;">7 spools</span></div><div style="height:4px;background:rgba(255,255,255,.06);border-radius:4px;"><div style="height:100%;width:55%;background:linear-gradient(90deg,#3b6aff,#7da4ff);border-radius:4px;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.35rem;"><span>ABS</span><span style="color:#6b7280;">5 spools</span></div><div style="height:4px;background:rgba(255,255,255,.06);border-radius:4px;"><div style="height:100%;width:35%;background:linear-gradient(90deg,#3b6aff,#7da4ff);border-radius:4px;"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="wrap">
+  <div class="fade-in">
+    <div class="section-label">// how it works</div>
+    <h2 class="section-title">Up and running<br>in minutes.</h2>
+    <p class="section-sub">No complex setup. No IT team required. Sign up and start running your farm smarter today.</p>
+  </div>
+  <div class="steps fade-in">
+    <div class="step"><div class="step-num">01 —</div><div class="step-title">Create your account</div><div class="step-desc">Set up your print farm profile. Add printers using quick-start profiles for Bambu, Prusa, Creality, and more in seconds.</div></div>
+    <div class="step"><div class="step-num">02 —</div><div class="step-title">Scan your inventory</div><div class="step-desc">Use the barcode scanner on mobile or desktop to log filament spools, hardware, and spare parts into the system instantly.</div></div>
+    <div class="step"><div class="step-num">03 —</div><div class="step-title">Connect your markets</div><div class="step-desc">OAuth into Shopify, Etsy, WooCommerce, or Square. Orders sync automatically and match to your printed parts by SKU.</div></div>
+    <div class="step"><div class="step-num">04 —</div><div class="step-title">Scale with confidence</div><div class="step-desc">Use reports, ROI tracking, and creator rankings to understand your costs and profitability — then grow with real data.</div></div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="wrap" id="pricing">
+  <div class="fade-in">
+    <div class="section-label">// pricing</div>
+    <h2 class="section-title">Pricing that won't<br>melt your nozzle.</h2>
+    <p class="section-sub">We're still calculating the exact numbers — turns out pricing software is harder than printing a Benchy. Sit tight, early access is free.</p>
+    <div style="display:inline-flex;align-items:center;gap:.6rem;background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.25);color:#ff8c42;font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;padding:.4rem 1rem;border-radius:100px;margin-top:1rem;">
+      <span style="width:6px;height:6px;background:#ff8c42;border-radius:50%;box-shadow:0 0 6px #ff8c42;display:inline-block;"></span>
+      PRICING COMING SOON — EARLY ACCESS IS FREE
+    </div>
+  </div>
+
+  <!-- TIER CARDS -->
+  <div class="pricing-grid fade-in" style="margin-top:2.5rem;">
+
+    <!-- Hobbyist -->
+    <div class="pricing-card">
+      <div class="tier">The Tinkerer</div>
+      <div class="price" style="font-size:1.4rem;letter-spacing:-.01em;color:var(--green);">Free forever*</div>
+      <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem;margin-bottom:.75rem;font-family:var(--mono);">*at least until we figure out our bills</div>
+      <div class="price-desc">You've got two printers, a dream, and a filament collection your partner doesn't know about. We've got you.</div>
+      <ul class="price-feats">
+        <li>Up to 2 printers</li>
+        <li>25 filament spools</li>
+        <li>Job logging & barcode scanning</li>
+        <li>Dashboard & auto tasks</li>
+        <li>Mobile PWA</li>
+      </ul>
+      <a href="#" class="pbtn out">Join Early Access</a>
+    </div>
+
+    <!-- Operator -->
+    <div class="pricing-card featured">
+      <div class="tier">The Operator</div>
+      <div class="price" style="font-size:1.4rem;letter-spacing:-.01em;">?? <span style="font-size:.85rem;">/ mo</span></div>
+      <div style="font-size:.7rem;color:#7da4ff;margin-top:.2rem;margin-bottom:.75rem;font-family:var(--mono);">currently priced at "vibes"</div>
+      <div class="price-desc">Your print farm is a real business now. Congrats. Your Bambu is printing while you sleep and your Etsy reviews are concerningly wholesome.</div>
+      <ul class="price-feats">
+        <li>Up to 10 printers</li>
+        <li>250 filament spools</li>
+        <li>2 marketplace integrations</li>
+        <li>Cost calculation & ROI tracking</li>
+        <li>3MF parsing & file management</li>
+        <li>Order & customer management</li>
+        <li>Basic reports</li>
+      </ul>
+      <a href="#" class="pbtn sol">Get Notified at Launch</a>
+    </div>
+
+    <!-- Studio -->
+    <div class="pricing-card">
+      <div class="tier">The Studio</div>
+      <div class="price" style="font-size:1.4rem;letter-spacing:-.01em;">TBD <span style="font-size:.85rem;color:var(--muted);">/ mo</span></div>
+      <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem;margin-bottom:.75rem;font-family:var(--mono);">we're asking a Bambu X1C for advice</div>
+      <div class="price-desc">You have employees, a spreadsheet problem, and printers in multiple rooms. You need all of it. We respect the chaos.</div>
+      <ul class="price-feats">
+        <li>Unlimited printers & spools</li>
+        <li>All marketplace integrations</li>
+        <li>Creator rankings & subscriptions</li>
+        <li>Market event tracking</li>
+        <li>Full analytics & reports</li>
+        <li>Role-based access control</li>
+        <li>Audit trail & AES-256 security</li>
+      </ul>
+      <a href="#" class="pbtn out">Get Notified at Launch</a>
+    </div>
+
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="fade-in" id="compare" style="margin-top:4rem;">
+    <h3 style="font-family:var(--display);font-size:1.1rem;font-weight:600;margin-bottom:.4rem;letter-spacing:-.01em;">Compare all features</h3>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:2rem;">Every plan includes early access for free. No credit card. No loot boxes. No microtransactions.</p>
+
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <colgroup>
+          <col style="width:40%">
+          <col style="width:20%">
+          <col style="width:20%">
+          <col style="width:20%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="feat-col"></th>
+            <th>
+              <div class="th-tier">The Tinkerer</div>
+              <div class="th-price" style="font-size:.95rem;color:var(--green);">Free*</div>
+              <div style="font-size:.62rem;color:var(--muted);font-family:var(--mono);margin-top:.2rem;">*respawn unlimited</div>
+            </th>
+            <th class="th-featured">
+              <div class="th-badge">Popular</div>
+              <div class="th-tier">The Operator</div>
+              <div class="th-price" style="font-size:.95rem;">Coming Soon</div>
+              <div style="font-size:.62rem;color:#7da4ff;font-family:var(--mono);margin-top:.2rem;">currently on side quest</div>
+            </th>
+            <th>
+              <div class="th-tier">The Studio</div>
+              <div class="th-price" style="font-size:.95rem;">Coming Soon</div>
+              <div style="font-size:.62rem;color:var(--muted);font-family:var(--mono);margin-top:.2rem;">final boss tier</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- LIMITS — Starter Stats -->
+          <tr class="group-row"><td colspan="4">⚔️ &nbsp;Starter Stats — Your Base Attributes</td></tr>
+          <tr>
+            <td class="feat-name">Printers <span style="color:var(--muted);font-size:.75rem;">(party size)</span></td>
+            <td>2</td>
+            <td class="col-featured">10</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <td class="feat-name">Filament spools <span style="color:var(--muted);font-size:.75rem;">(ammo count)</span></td>
+            <td>25</td>
+            <td class="col-featured">250</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <td class="feat-name">Team members <span style="color:var(--muted);font-size:.75rem;">(co-op slots)</span></td>
+            <td>1 <span style="color:var(--muted);font-size:.75rem;">(solo run)</span></td>
+            <td class="col-featured">3</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <td class="feat-name">Marketplace integrations <span style="color:var(--muted);font-size:.75rem;">(fast travel points)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured">2</td>
+            <td>All</td>
+          </tr>
+
+          <!-- INVENTORY — Item Pouch -->
+          <tr class="group-row"><td colspan="4">🎒 &nbsp;Item Pouch — Inventory Management</td></tr>
+          <tr>
+            <td class="feat-name">Filament tracking with progress bars</td>
+            <td><span class="yes">✓</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Hardware inventory</td>
+            <td><span class="yes">✓</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Printer spare parts tracking</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Barcode / QR scanning</td>
+            <td><span class="yes">✓</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Low stock alerts <span style="color:var(--muted);font-size:.75rem;">(out of ammo warning)</span></td>
+            <td><span class="yes">✓</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Stock audit trail & undo <span style="color:var(--muted);font-size:.75rem;">(save scumming, but legal)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="no">—</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+
+          <!-- PRINTERS — Fleet -->
+          <tr class="group-row"><td colspan="4">🖨️ &nbsp;Your Fleet — Printer Management</td></tr>
+          <tr>
+            <td class="feat-name">Printer profiles</td>
+            <td><span class="yes">✓</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Quick-start profiles (Bambu, Prusa, etc.)</td>
+            <td><span class="yes">✓</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">ROI tracking per printer <span style="color:var(--muted);font-size:.75rem;">(K/D ratio for machines)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Parts compatibility mapping</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+
+          <!-- JOBS — Active Quests -->
+          <tr class="group-row"><td colspan="4">📜 &nbsp;Active Quests — Print Job Workflow</td></tr>
+          <tr>
+            <td class="feat-name">Job logging (printer, spool, outcome)</td>
+            <td><span class="yes">✓</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Spool weight check-in <span style="color:var(--muted);font-size:.75rem;">(weighing your loot)</span></td>
+            <td><span class="yes">✓</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Smart spool & printer recommendations <span style="color:var(--muted);font-size:.75rem;">(AI companion)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Job ratings (feeds recommendation engine)</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Partial success handling <span style="color:var(--muted);font-size:.75rem;">(it was a partial win, okay?)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+
+          <!-- FILES — Spell Book -->
+          <tr class="group-row"><td colspan="4">📖 &nbsp;Spell Book — Print File Management</td></tr>
+          <tr>
+            <td class="feat-name">3MF upload & auto-parsing</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Version tracking <span style="color:var(--muted);font-size:.75rem;">(patch notes for your files)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Bill of materials per file</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Automatic cost calculation <span style="color:var(--muted);font-size:.75rem;">(no more vibes-based pricing)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+
+          <!-- ORDERS — Merchant -->
+          <tr class="group-row"><td colspan="4">💰 &nbsp;The Merchant — Orders & Customers</td></tr>
+          <tr>
+            <td class="feat-name">Manual order entry</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Marketplace order sync</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured">2 channels</td>
+            <td>All channels</td>
+          </tr>
+          <tr>
+            <td class="feat-name">Customer records & order history</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Revenue attribution to printers <span style="color:var(--muted);font-size:.75rem;">(which unit carried the team)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Parts pricing & MSRP calculation</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+
+          <!-- BUSINESS — End Game -->
+          <tr class="group-row"><td colspan="4">🏆 &nbsp;End Game — Business Tools</td></tr>
+          <tr>
+            <td class="feat-name">Creator subscriptions tracking</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="no">—</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Creator profitability rankings <span style="color:var(--muted);font-size:.75rem;">(leaderboard goes brrr)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="no">—</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Market event tracking & packing lists</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="no">—</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Full analytics & reports</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured">Basic</td>
+            <td>Full</td>
+          </tr>
+          <tr>
+            <td class="feat-name">Patreon auto file-release detection</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="no">—</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+
+          <!-- ADMIN — Guild Settings -->
+          <tr class="group-row"><td colspan="4">🛡️ &nbsp;Guild Settings — Admin & Security</td></tr>
+          <tr>
+            <td class="feat-name">Role-based access <span style="color:var(--muted);font-size:.75rem;">(class system: Owner → Viewer)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="no">—</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Stock audit trail <span style="color:var(--muted);font-size:.75rem;">(who touched my filament?)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="no">—</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">AES-256-GCM credential encryption</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="no">—</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">SSL & Let's Encrypt management</td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="no">—</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Session timeout & password policies <span style="color:var(--muted);font-size:.75rem;">(anti-grief settings)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="no">—</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Mobile PWA <span style="color:var(--muted);font-size:.75rem;">(play on any device)</span></td>
+            <td><span class="yes">✓</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+
+          <!-- SUPPORT — Help Desk -->
+          <tr class="group-row"><td colspan="4">🎮 &nbsp;Help Desk — Support</td></tr>
+          <tr>
+            <td class="feat-name">Community support <span style="color:var(--muted);font-size:.75rem;">(ask the village)</span></td>
+            <td><span class="yes">✓</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Email support <span style="color:var(--muted);font-size:.75rem;">(we actually reply)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="yes">✓</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Priority support <span style="color:var(--muted);font-size:.75rem;">(skip the queue, VIP lane)</span></td>
+            <td><span class="no">—</span></td>
+            <td class="col-featured"><span class="no">—</span></td>
+            <td><span class="yes">✓</span></td>
+          </tr>
+
+          <!-- CTA ROW -->
+          <tr class="cta-row">
+            <td></td>
+            <td><a href="#" class="pbtn out" style="display:block;text-align:center;font-size:.8rem;padding:.6rem;">Join Early Access</a></td>
+            <td class="col-featured"><a href="#" class="pbtn sol" style="display:block;text-align:center;font-size:.8rem;padding:.6rem;">Get Notified</a></td>
+            <td><a href="#" class="pbtn out" style="display:block;text-align:center;font-size:.8rem;padding:.6rem;">Get Notified</a></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap fade-in">
+  <div class="cta-banner">
+    <h2 class="cta-title">Your filament won't track itself.</h2>
+    <p class="cta-sub">Join the early access list — it's free, it's fun, and your print farm deserves better than a spreadsheet named "FINAL_v3_ACTUAL_FINAL.xlsx".</p>
+    <a href="#" class="btn-primary">Join Early Access — It's Free</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">TacticalYogurt</div>
+  <span class="footer-copy">© 2025 TacticalYogurt. All rights reserved.</span>
+  <ul class="footer-links">
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+  // Scroll fade-ins
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // Active nav link on scroll
+  const sections = [
+    { id: 'features', label: 'Features' },
+    { id: 'integrations', label: 'Integrations' },
+    { id: 'how-it-works', label: 'How it Works' },
+    { id: 'pricing', label: 'Pricing' },
+    { id: 'compare', label: 'Compare Plans' },
+  ];
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      const el = document.getElementById(s.id);
+      if (el && window.scrollY >= el.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
