@@ -970,9 +970,13 @@
   const navLinks = document.querySelectorAll('.nav-links a');
   window.addEventListener('scroll', () => {
     let current = '';
-    sections.forEach(s => {
+    sections.forEach((s, i) => {
       const el = document.getElementById(s.id);
-      if (el && window.scrollY >= el.offsetTop - 100) current = s.id;
+      if (!el) return;
+      const top = el.offsetTop - 100;
+      const nextEl = sections[i + 1] ? document.getElementById(sections[i + 1].id) : null;
+      const bottom = nextEl ? nextEl.offsetTop - 100 : document.body.scrollHeight;
+      if (window.scrollY >= top && window.scrollY < bottom) current = s.id;
     });
     navLinks.forEach(a => {
       a.classList.remove('active');
