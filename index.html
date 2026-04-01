@@ -322,6 +322,10 @@
     .hero-visual { display: none; }
     h1 { font-size: clamp(2rem, 6vw, 3rem); }
   }
+
+  /* CYCLING HEADLINE */
+  .hero-cycling { display: inline-block; transition: opacity .25s ease, transform .25s ease; }
+  .hero-cycling.fade-out { opacity: 0; transform: translateY(-6px); }
   </style>
 </head>
 <body>
@@ -369,7 +373,7 @@
 
     <!-- Left: text -->
     <div class="hero-text">
-      <h1>Command your<br><span>print farm.</span><br>Not your spreadsheets.</h1>
+      <h1>Command your<br><span class="hero-cycling">print farm.</span><br>Not your spreadsheets.</h1>
       <div class="hero-tag">
         <span class="hero-tag-dot"></span>
         All in one inventory and print farm management
@@ -1189,6 +1193,21 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeModal();
   });
+
+  // Cycling headline
+  const cycleWords = ['print farm.', 'inventory.', 'printers.', 'filament.', 'jobs.'];
+  let cycleIdx = 0;
+  const cycleEl = document.querySelector('.hero-cycling');
+  if (cycleEl) {
+    setInterval(() => {
+      cycleEl.classList.add('fade-out');
+      setTimeout(() => {
+        cycleIdx = (cycleIdx + 1) % cycleWords.length;
+        cycleEl.textContent = cycleWords[cycleIdx];
+        cycleEl.classList.remove('fade-out');
+      }, 250);
+    }, 2500);
+  }
 </script>
 </body>
 </html>
