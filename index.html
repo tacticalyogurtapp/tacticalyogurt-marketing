@@ -43,7 +43,8 @@
       background: rgba(15,10,30,.92); backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
-    .nav-logo { display: flex; align-items: center; gap: .6rem; font-family: var(--display); font-weight: 600; font-size: 1rem; letter-spacing: -.01em; color: var(--text); text-decoration: none; white-space: nowrap; flex-shrink: 0; }
+    .nav-logo { display: flex; align-items: center; gap: .6rem; font-family: var(--display); font-weight: 600; font-size: 1rem; letter-spacing: -.01em; text-decoration: none; white-space: nowrap; flex-shrink: 0; }
+    .nav-logo-text { background: linear-gradient(90deg, #a78bfa, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .nav-dot { width: 8px; height: 8px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 10px var(--blue); animation: pulse 2.5s ease-in-out infinite; }
     @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(.8)} }
     .nav-divider { width: 1px; height: 20px; background: var(--border); margin: 0 1.5rem; flex-shrink: 0; }
@@ -69,9 +70,9 @@
     .hero { position: relative; min-height: 100vh; overflow: hidden; display: flex; align-items: center; padding: 80px 0 0; }
     .hero::after {
       content: ''; position: absolute; inset: 0;
-      background-image: linear-gradient(rgba(124,58,237,.04) 1px,transparent 1px), linear-gradient(90deg,rgba(124,58,237,.04) 1px,transparent 1px);
-      background-size: 48px 48px;
-      mask-image: radial-gradient(ellipse 80% 60% at 30% 50%,black 30%,transparent 100%);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34.64' height='60'%3E%3Cpath d='M17.32,0 L34.64,10 L34.64,30 L17.32,40 L0,30 L0,10 Z' fill='none' stroke='%23a78bfa' stroke-width='3' stroke-opacity='0.04'/%3E%3Cline x1='17.32' y1='40' x2='17.32' y2='60' stroke='%23a78bfa' stroke-width='3' stroke-opacity='0.04'/%3E%3Cpath d='M17.32,0 L34.64,10 L34.64,30 L17.32,40 L0,30 L0,10 Z' fill='none' stroke='%23a78bfa' stroke-width='0.75' stroke-opacity='0.22'/%3E%3Cline x1='17.32' y1='40' x2='17.32' y2='60' stroke='%23a78bfa' stroke-width='0.75' stroke-opacity='0.22'/%3E%3C/svg%3E");
+      background-size: 34.64px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 30% 50%, black 30%, transparent 100%);
       pointer-events: none;
     }
     .hero-glow {
@@ -271,35 +272,36 @@
   /* HERO DASHBOARD MOCK */
   .hero-visual { position: relative; }
   .dashboard-mock {
-    background: rgba(255,255,255,.02);
-    border: 1px solid rgba(167,139,250,.12);
+    background: rgba(20,12,38,.85);
+    border: 1px solid rgba(167,139,250,.18);
     border-radius: 14px; overflow: hidden;
-    box-shadow: 0 32px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(167,139,250,.08);
+    box-shadow: 0 32px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(167,139,250,.12);
+    backdrop-filter: blur(8px);
   }
   .mock-topbar {
-    background: rgba(255,255,255,.03);
-    border-bottom: 1px solid rgba(255,255,255,.05);
+    background: rgba(255,255,255,.04);
+    border-bottom: 1px solid rgba(255,255,255,.07);
     padding: .65rem 1rem;
     display: flex; align-items: center; gap: .5rem;
   }
   .mock-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-  .mock-title { font-size: .7rem; color: #4b5563; font-family: var(--mono); margin-left: auto; }
+  .mock-title { font-size: .7rem; color: #6b7280; font-family: var(--mono); margin-left: auto; }
   .mock-body { padding: 1rem; display: flex; flex-direction: column; gap: .85rem; }
   .mock-stat-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .6rem; }
   .mock-stat-card {
-    background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.05);
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
     border-radius: 8px; padding: .65rem .75rem;
   }
-  .mock-stat-card .mock-stat-label { font-size: .6rem; color: #4b5563; font-family: var(--mono); margin-bottom: .3rem; }
+  .mock-stat-card .mock-stat-label { font-size: .6rem; color: #6b7280; font-family: var(--mono); margin-bottom: .3rem; }
   .mock-stat-card .mock-stat-num { font-size: 1.1rem; font-weight: 700; font-family: var(--display); }
   .mock-stat-card .mock-stat-num.violet { color: #a78bfa; }
   .mock-stat-card .mock-stat-num.amber { color: #fb923c; }
   .mock-stat-card .mock-stat-num.green { color: #4ade80; }
-  .mock-stat-card .mock-stat-sub { font-size: .62rem; color: #4b5563; margin-top: .15rem; }
+  .mock-stat-card .mock-stat-sub { font-size: .62rem; color: #6b7280; margin-top: .15rem; }
   .mock-section { display: flex; flex-direction: column; gap: .35rem; }
-  .mock-section-label { font-size: .6rem; color: #4b5563; font-family: var(--mono); letter-spacing: .05em; margin-bottom: .1rem; }
+  .mock-section-label { font-size: .6rem; color: #6b7280; font-family: var(--mono); letter-spacing: .05em; margin-bottom: .1rem; }
   .mock-spool-row {
-    background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.04);
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07);
     border-radius: 6px; padding: .45rem .75rem;
     display: flex; align-items: center; gap: .6rem;
   }
@@ -307,9 +309,9 @@
   .mock-spool-name { font-size: .72rem; flex: 1; }
   .mock-bar-wrap { flex: 2; height: 3px; background: rgba(255,255,255,.05); border-radius: 2px; overflow: hidden; display: inline-block; }
   .mock-bar { height: 100%; border-radius: 2px; display: block; }
-  .mock-pct { font-size: .65rem; color: #4b5563; width: 28px; text-align: right; font-family: var(--mono); }
+  .mock-pct { font-size: .65rem; color: #6b7280; width: 28px; text-align: right; font-family: var(--mono); }
   .mock-printer-row {
-    background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.04);
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07);
     border-radius: 6px; padding: .45rem .75rem;
     display: flex; align-items: center; gap: .6rem;
   }
@@ -332,7 +334,7 @@
 
 <!-- NAV -->
 <nav>
-  <a class="nav-logo" href="#"><div class="nav-dot"></div>TacticalYogurt</a>
+  <a class="nav-logo" href="#"><div class="nav-dot"></div><span class="nav-logo-text">TacticalYogurt</span></a>
   <div class="nav-divider"></div>
   <ul class="nav-links">
     <li><a href="#">Home</a></li>
@@ -1161,13 +1163,11 @@
   const navLinks = document.querySelectorAll('.nav-links a');
   window.addEventListener('scroll', () => {
     let current = '';
-    sections.forEach((s, i) => {
+    sections.forEach(s => {
       const el = document.getElementById(s.id);
       if (!el) return;
-      const top = el.offsetTop - 100;
-      const nextEl = sections[i + 1] ? document.getElementById(sections[i + 1].id) : null;
-      const bottom = nextEl ? nextEl.offsetTop - 100 : document.body.scrollHeight;
-      if (window.scrollY >= top && window.scrollY < bottom) current = s.id;
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= 120) current = s.id;
     });
     navLinks.forEach(a => {
       a.classList.remove('active');
