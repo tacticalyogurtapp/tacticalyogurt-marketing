@@ -54,20 +54,6 @@ background:
 
 ---
 
-## 2. Typography
-
-Add **DM Serif Display** to the Google Fonts import:
-```
-family=DM+Serif+Display:ital@1
-```
-
-Add CSS variable:
-```css
---serif: 'DM Serif Display', serif;
-```
-
-Used only for the hero eyebrow label.
-
 ---
 
 ## 3. Hero Restructure
@@ -86,23 +72,33 @@ Replace the current centered single-column hero with a two-column CSS grid:
 
 ### Left Column — Text
 
-**Eyebrow label** (replaces pill badge):
-```html
-<div class="hero-eyebrow">The all-in-one print farm platform</div>
-```
-```css
-.hero-eyebrow {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 1.1rem;
-  color: var(--amber-light);
-  margin-bottom: .75rem;
-}
-```
-
 **Headline:** unchanged text, left-aligned, gradient on `<span>`
 
 **Subtext:** unchanged, left-aligned, `max-width: 420px`
+
+**Status tag** (below headline, replaces pill badge):
+```html
+<div class="hero-tag">
+  <span class="hero-tag-dot"></span>
+  All in one inventory and print farm management
+</div>
+```
+```css
+.hero-tag {
+  display: inline-flex; align-items: center; gap: .6rem;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 6px; padding: .4rem .85rem;
+  font-family: var(--mono); font-size: .72rem; color: #9ca3af;
+  margin-bottom: 1.5rem;
+}
+.hero-tag-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--amber-light);
+  box-shadow: 0 0 6px var(--amber-light);
+  animation: pulse 2s infinite;
+  flex-shrink: 0;
+}
+```
 
 **CTAs:** two buttons side by side
 - Primary: "Join Early Access — It's Free" → gradient button, calls `openModal()`
