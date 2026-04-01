@@ -66,21 +66,48 @@
     .nav-mobile .nav-cta { text-align: center; margin-top: .5rem; }
 
     /* HERO */
-    .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 8rem 2rem 5rem; overflow: hidden; }
+    .hero { position: relative; min-height: 100vh; overflow: hidden; display: flex; align-items: center; padding: 80px 0 0; }
     .hero::after {
       content: ''; position: absolute; inset: 0;
       background-image: linear-gradient(rgba(124,58,237,.04) 1px,transparent 1px), linear-gradient(90deg,rgba(124,58,237,.04) 1px,transparent 1px);
       background-size: 48px 48px;
-      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%,black 30%,transparent 100%);
+      mask-image: radial-gradient(ellipse 80% 60% at 30% 50%,black 30%,transparent 100%);
       pointer-events: none;
     }
-    .hero-glow { position: absolute; width: 700px; height: 400px; background: radial-gradient(ellipse,rgba(124,58,237,.18) 0%,transparent 70%); top: 10%; left: 50%; transform: translateX(-50%); pointer-events: none; filter: blur(40px); }
-    .hero-badge { display: inline-flex; align-items: center; gap: .5rem; background: rgba(124,58,237,.12); border: 1px solid rgba(124,58,237,.3); color: #a78bfa; font-family: var(--mono); font-size: .75rem; padding: .35rem .85rem; border-radius: 100px; margin-bottom: 1.75rem; letter-spacing: .05em; animation: fadeUp .6s ease both; }
-    .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--violet-light); border-radius: 50%; box-shadow: 0 0 6px var(--violet-light); }
-    h1 { font-family: var(--display); font-size: clamp(2rem,5vw,3.75rem); font-weight: 700; line-height: 1.1; letter-spacing: -.025em; max-width: 820px; animation: fadeUp .7s .1s ease both; }
+    .hero-glow {
+      position: absolute; inset: 0; pointer-events: none; filter: blur(40px);
+      background: radial-gradient(ellipse at 20% 50%, rgba(124,58,237,.15) 0%, transparent 50%),
+                  radial-gradient(ellipse at 80% 20%, rgba(234,88,12,.08) 0%, transparent 40%);
+    }
+    .hero-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 4rem;
+      max-width: 1200px; width: 100%; margin: 0 auto;
+      padding: 5rem 3rem; position: relative; z-index: 1;
+    }
+    .hero-text { display: flex; flex-direction: column; }
+    h1 { font-family: var(--display); font-size: clamp(2rem,3.5vw,3.25rem); font-weight: 700; line-height: 1.1; letter-spacing: -.025em; animation: fadeUp .7s .1s ease both; }
     h1 span { background: linear-gradient(90deg, #a78bfa 0%, #fb923c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .hero-sub { margin-top: 1.5rem; font-size: 1.1rem; color: var(--muted); max-width: 540px; font-weight: 300; line-height: 1.75; animation: fadeUp .7s .2s ease both; }
-    .hero-actions { display: flex; gap: 1rem; margin-top: 2.5rem; animation: fadeUp .7s .3s ease both; flex-wrap: wrap; justify-content: center; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: .6rem;
+      border: 1px solid rgba(255,255,255,.1); border-radius: 6px;
+      padding: .4rem .85rem; font-family: var(--mono); font-size: .72rem;
+      color: #9ca3af; margin-top: 1rem; margin-bottom: 1rem; align-self: flex-start;
+    }
+    .hero-tag-dot {
+      width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+      background: var(--amber-light); box-shadow: 0 0 6px var(--amber-light);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .hero-sub { font-size: 1rem; color: var(--muted); max-width: 440px; font-weight: 300; line-height: 1.75; animation: fadeUp .7s .2s ease both; }
+    .hero-actions { display: flex; gap: 1rem; margin-top: 2rem; animation: fadeUp .7s .3s ease both; flex-wrap: wrap; }
+    .hero-stats { display: flex; gap: 2rem; margin-top: 2.5rem; flex-wrap: wrap; }
+    .hero-stat-num {
+      font-family: var(--display); font-size: 1.5rem; font-weight: 700;
+      background: linear-gradient(90deg, #a78bfa, #fb923c);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-stat-label { font-size: .72rem; color: var(--muted); margin-top: .15rem; line-height: 1.4; max-width: 80px; }
     .btn-primary { background: linear-gradient(90deg, #7c3aed, #ea580c); color: #fff; padding: .8rem 2rem; border-radius: 8px; font-weight: 500; font-size: .95rem; text-decoration: none; transition: all .2s; box-shadow: 0 4px 24px rgba(124,58,237,.4); }
     .btn-primary:hover { filter: brightness(1.15); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(124,58,237,.5); }
     .btn-ghost { background: transparent; color: var(--text); padding: .8rem 2rem; border-radius: 8px; font-size: .95rem; text-decoration: none; border: 1px solid var(--border); transition: all .2s; }
@@ -240,6 +267,61 @@
   }
   .modal-close:hover { color: var(--text); }
   .modal iframe { display: block; width: 100%; border: none; border-radius: 4px; }
+
+  /* HERO DASHBOARD MOCK */
+  .hero-visual { position: relative; }
+  .dashboard-mock {
+    background: rgba(255,255,255,.02);
+    border: 1px solid rgba(167,139,250,.12);
+    border-radius: 14px; overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(167,139,250,.08);
+  }
+  .mock-topbar {
+    background: rgba(255,255,255,.03);
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    padding: .65rem 1rem;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .mock-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .mock-title { font-size: .7rem; color: #4b5563; font-family: var(--mono); margin-left: auto; }
+  .mock-body { padding: 1rem; display: flex; flex-direction: column; gap: .85rem; }
+  .mock-stat-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .6rem; }
+  .mock-stat-card {
+    background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.05);
+    border-radius: 8px; padding: .65rem .75rem;
+  }
+  .mock-stat-card .mock-stat-label { font-size: .6rem; color: #4b5563; font-family: var(--mono); margin-bottom: .3rem; }
+  .mock-stat-card .mock-stat-num { font-size: 1.1rem; font-weight: 700; font-family: var(--display); }
+  .mock-stat-card .mock-stat-num.violet { color: #a78bfa; }
+  .mock-stat-card .mock-stat-num.amber { color: #fb923c; }
+  .mock-stat-card .mock-stat-num.green { color: #4ade80; }
+  .mock-stat-card .mock-stat-sub { font-size: .62rem; color: #4b5563; margin-top: .15rem; }
+  .mock-section { display: flex; flex-direction: column; gap: .35rem; }
+  .mock-section-label { font-size: .6rem; color: #4b5563; font-family: var(--mono); letter-spacing: .05em; margin-bottom: .1rem; }
+  .mock-spool-row {
+    background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.04);
+    border-radius: 6px; padding: .45rem .75rem;
+    display: flex; align-items: center; gap: .6rem;
+  }
+  .mock-spool-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+  .mock-spool-name { font-size: .72rem; flex: 1; }
+  .mock-bar-wrap { flex: 2; height: 3px; background: rgba(255,255,255,.05); border-radius: 2px; overflow: hidden; display: inline-block; }
+  .mock-bar { height: 100%; border-radius: 2px; display: block; }
+  .mock-pct { font-size: .65rem; color: #4b5563; width: 28px; text-align: right; font-family: var(--mono); }
+  .mock-printer-row {
+    background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.04);
+    border-radius: 6px; padding: .45rem .75rem;
+    display: flex; align-items: center; gap: .6rem;
+  }
+  .mock-status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+  .mock-printer-name { font-size: .72rem; flex: 1; }
+  .mock-printer-job { font-size: .65rem; color: #6b7280; font-family: var(--mono); }
+  .mock-printer-eta { font-size: .65rem; color: #a78bfa; margin-left: auto; }
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
+    .hero-visual { display: none; }
+    h1 { font-size: clamp(2rem, 6vw, 3rem); }
+  }
   </style>
 </head>
 <body>
