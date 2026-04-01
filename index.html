@@ -8,18 +8,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:        #0a0c10;
-      --bg2:       #0f1117;
-      --card:      #13171f;
-      --border:    rgba(255,255,255,0.07);
-      --blue:      #3b6aff;
-      --blue-glow: rgba(59,106,255,0.25);
-      --green:     #2fd87a;
-      --text:      #e8ecf4;
-      --muted:     #6b7280;
-      --mono:      'JetBrains Mono', monospace;
-      --sans:      'Figtree', sans-serif;
-      --display:   'Outfit', sans-serif;
+      --bg:           #0f0a1e;
+      --bg2:          #140e24;
+      --card:         #160f26;
+      --border:       rgba(167,139,250,0.1);
+      --blue:         #7c3aed;
+      --blue-glow:    rgba(124,58,237,0.25);
+      --green:        #4ade80;
+      --violet:       #7c3aed;
+      --violet-light: #a78bfa;
+      --amber:        #ea580c;
+      --amber-light:  #fb923c;
+      --text:         #e8ecf4;
+      --muted:        #6b7280;
+      --mono:         'JetBrains Mono', monospace;
+      --sans:         'Figtree', sans-serif;
+      --display:      'Outfit', sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -36,7 +40,7 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; gap: 0;
       padding: 0 2rem; height: 64px;
-      background: rgba(10,12,16,.92); backdrop-filter: blur(20px);
+      background: rgba(15,10,30,.92); backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
     .nav-logo { display: flex; align-items: center; gap: .6rem; font-family: var(--display); font-weight: 600; font-size: 1rem; letter-spacing: -.01em; color: var(--text); text-decoration: none; white-space: nowrap; flex-shrink: 0; }
@@ -55,7 +59,7 @@
     /* Mobile hamburger */
     .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: .5rem; margin-left: auto; }
     .nav-hamburger span { display: block; width: 20px; height: 2px; background: var(--muted); border-radius: 2px; transition: all .3s; }
-    .nav-mobile { display: none; position: fixed; top: 64px; left: 0; right: 0; background: rgba(10,12,16,.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 1rem 2rem 1.5rem; flex-direction: column; gap: .25rem; z-index: 99; }
+    .nav-mobile { display: none; position: fixed; top: 64px; left: 0; right: 0; background: rgba(15,10,30,.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 1rem 2rem 1.5rem; flex-direction: column; gap: .25rem; z-index: 99; }
     .nav-mobile.open { display: flex; }
     .nav-mobile a { color: var(--muted); text-decoration: none; font-size: .9rem; padding: .6rem .75rem; border-radius: 6px; transition: color .2s, background .2s; }
     .nav-mobile a:hover { color: var(--text); background: rgba(255,255,255,.05); }
@@ -65,12 +69,12 @@
     .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 8rem 2rem 5rem; overflow: hidden; }
     .hero::after {
       content: ''; position: absolute; inset: 0;
-      background-image: linear-gradient(rgba(59,106,255,.04) 1px,transparent 1px), linear-gradient(90deg,rgba(59,106,255,.04) 1px,transparent 1px);
+      background-image: linear-gradient(rgba(124,58,237,.04) 1px,transparent 1px), linear-gradient(90deg,rgba(124,58,237,.04) 1px,transparent 1px);
       background-size: 48px 48px;
       mask-image: radial-gradient(ellipse 80% 60% at 50% 40%,black 30%,transparent 100%);
       pointer-events: none;
     }
-    .hero-glow { position: absolute; width: 700px; height: 400px; background: radial-gradient(ellipse,rgba(59,106,255,.18) 0%,transparent 70%); top: 10%; left: 50%; transform: translateX(-50%); pointer-events: none; filter: blur(40px); }
+    .hero-glow { position: absolute; width: 700px; height: 400px; background: radial-gradient(ellipse,rgba(124,58,237,.18) 0%,transparent 70%); top: 10%; left: 50%; transform: translateX(-50%); pointer-events: none; filter: blur(40px); }
     .hero-badge { display: inline-flex; align-items: center; gap: .5rem; background: rgba(59,106,255,.12); border: 1px solid rgba(59,106,255,.3); color: #7da4ff; font-family: var(--mono); font-size: .75rem; padding: .35rem .85rem; border-radius: 100px; margin-bottom: 1.75rem; letter-spacing: .05em; animation: fadeUp .6s ease both; }
     .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 6px var(--blue); }
     h1 { font-family: var(--display); font-size: clamp(2rem,5vw,3.75rem); font-weight: 700; line-height: 1.1; letter-spacing: -.025em; max-width: 820px; animation: fadeUp .7s .1s ease both; }
@@ -92,7 +96,7 @@
     /* PHOTO BREAK */
     .photo-break { position: relative; z-index: 1; width: 100%; height: 420px; overflow: hidden; }
     .photo-break img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; filter: brightness(.4) saturate(.65); }
-    .photo-break-overlay { position: absolute; inset: 0; background: linear-gradient(to right,rgba(10,12,16,1) 0%,rgba(10,12,16,.25) 35%,rgba(10,12,16,.25) 65%,rgba(10,12,16,1) 100%), linear-gradient(to bottom,rgba(10,12,16,.5) 0%,transparent 20%,transparent 80%,rgba(10,12,16,.7) 100%); display: flex; align-items: center; justify-content: center; }
+    .photo-break-overlay { position: absolute; inset: 0; background: linear-gradient(to right,rgba(15,10,30,1) 0%,rgba(15,10,30,.25) 35%,rgba(15,10,30,.25) 65%,rgba(15,10,30,1) 100%), linear-gradient(to bottom,rgba(15,10,30,.5) 0%,transparent 20%,transparent 80%,rgba(15,10,30,.7) 100%); display: flex; align-items: center; justify-content: center; }
     .photo-break-text { text-align: center; padding: 0 2rem; }
     .photo-break-text h2 { font-family: var(--display); font-size: clamp(1.3rem,3vw,2rem); font-weight: 600; letter-spacing: -.02em; line-height: 1.2; margin-bottom: .75rem; }
     .photo-break-text p { color: var(--muted); font-size: 1rem; max-width: 500px; margin: 0 auto; }
