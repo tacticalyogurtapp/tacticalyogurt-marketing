@@ -50,6 +50,8 @@
     .nav-links a.active { color: var(--text); }
     .nav-cta { background: var(--blue); color: #fff; padding: .45rem 1.1rem; border-radius: 6px; font-size: .8rem; font-weight: 500; text-decoration: none; transition: background .2s, box-shadow .2s; white-space: nowrap; flex-shrink: 0; margin-left: 1rem; }
     .nav-cta:hover { background: #4d7aff; box-shadow: 0 0 20px var(--blue-glow); }
+    .nav-cta-outline { border: 1px solid var(--border); color: var(--text); padding: .45rem 1.1rem; border-radius: 6px; font-size: .8rem; font-weight: 500; text-decoration: none; transition: border-color .2s, background .2s; white-space: nowrap; flex-shrink: 0; margin-left: .5rem; }
+    .nav-cta-outline:hover { border-color: rgba(255,255,255,.2); background: rgba(255,255,255,.05); }
     /* Mobile hamburger */
     .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: .5rem; margin-left: auto; }
     .nav-hamburger span { display: block; width: 20px; height: 2px; background: var(--muted); border-radius: 2px; transition: all .3s; }
@@ -254,6 +256,7 @@
     <li><a href="#compare">Compare Plans</a></li>
   </ul>
   <div class="nav-divider"></div>
+  <a href="#" class="nav-cta-outline" onclick="event.preventDefault(); openModal()">Contact Us</a>
   <a href="#pricing" class="nav-cta">Get Started</a>
   <!-- Mobile hamburger -->
   <div class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -269,6 +272,7 @@
   <a href="#how-it-works" onclick="closeMenu()">How it Works</a>
   <a href="#pricing" onclick="closeMenu()">Pricing</a>
   <a href="#compare" onclick="closeMenu()">Compare Plans</a>
+  <a href="#" class="nav-cta-outline" onclick="closeMenu(); openModal()">Contact Us</a>
   <a href="#pricing" class="nav-cta" onclick="closeMenu()">Get Started</a>
 </div>
 
