@@ -26,7 +26,7 @@
       --display:      'Outfit', sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
     body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
     body::before {
       content: '';
@@ -282,10 +282,10 @@
       0 0 0 1px rgba(255,255,255,.04),
       0 48px 120px rgba(0,0,0,.75),
       inset 0 1px 0 rgba(255,255,255,.07);
-    transform: perspective(1200px) rotateY(-5deg) rotateX(2deg);
+    transform: perspective(1200px) rotateY(5deg) rotateX(2deg);
     transition: transform .3s ease;
   }
-  .tablet-frame:hover { transform: perspective(1200px) rotateY(-2deg) rotateX(1deg); }
+  .tablet-frame:hover { transform: perspective(1200px) rotateY(2deg) rotateX(1deg); }
   .tablet-camera {
     width: 8px; height: 8px;
     background: rgba(167,139,250,.3);
@@ -365,9 +365,9 @@
   <ul class="nav-links">
     <li><a href="#">Home</a></li>
     <li><a href="#features">Features</a></li>
-    <li><a href="#features">Inventory</a></li>
-    <li><a href="#features">Fleet</a></li>
-    <li><a href="#features">Jobs</a></li>
+    <li><a href="#inventory">Inventory</a></li>
+    <li><a href="#fleet">Fleet</a></li>
+    <li><a href="#jobs">Jobs</a></li>
     <li><a href="#integrations">Integrations</a></li>
     <li><a href="#how-it-works">How it Works</a></li>
     <li><a href="#pricing">Pricing</a></li>
@@ -399,31 +399,7 @@
   <div class="hero-glow"></div>
   <div class="hero-inner">
 
-    <!-- Left: text -->
-    <div class="hero-text">
-      <h1>Command your<br><span class="hero-cycling">print farm.</span><br>Not your spreadsheets.</h1>
-      <p class="hero-sub">Track every spool, manage every printer, fulfill every order — from one dashboard built for serious makers.</p>
-      <div class="hero-actions">
-        <a href="#" class="btn-primary" onclick="event.preventDefault(); openModal()">Join Early Access — It's Free</a>
-        <a href="#how-it-works" class="btn-ghost">See how it works →</a>
-      </div>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="hero-stat-num">16+</div>
-          <div class="hero-stat-label">Part categories tracked</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-num">5</div>
-          <div class="hero-stat-label">Marketplace integrations</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-num">∞</div>
-          <div class="hero-stat-label">Printers supported</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right: dashboard mock -->
+    <!-- Left: dashboard mock -->
     <div class="hero-visual">
       <div class="tablet-frame">
         <div class="tablet-camera"></div>
@@ -504,6 +480,30 @@
       </div>
     </div>
 
+    <!-- Right: text -->
+    <div class="hero-text">
+      <h1>Command your<br><span class="hero-cycling">print farm.</span><br>Not your spreadsheets.</h1>
+      <p class="hero-sub">Track every spool, manage every printer, fulfill every order — from one dashboard built for serious makers.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary" onclick="event.preventDefault(); openModal()">Join Early Access — It's Free</a>
+        <a href="#how-it-works" class="btn-ghost">See how it works →</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">16+</div>
+          <div class="hero-stat-label">Part categories tracked</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">5</div>
+          <div class="hero-stat-label">Marketplace integrations</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">∞</div>
+          <div class="hero-stat-label">Printers supported</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -535,7 +535,7 @@
   </div>
 
   <!-- Inventory -->
-  <div class="feat-cat fade-in" style="margin-top:3rem;">
+  <div class="feat-cat fade-in" id="inventory" style="margin-top:3rem;">
     <div class="cat-header">
       <div class="cat-icon" style="background:rgba(59,106,255,.15)">
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b6aff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.29 7 8.71 5 8.71-5"/><line x1="12" y1="22" x2="12" y2="12"/></svg>
@@ -553,7 +553,7 @@
   </div>
 
   <!-- Printer Fleet -->
-  <div class="feat-cat fade-in">
+  <div class="feat-cat fade-in" id="fleet">
     <div class="cat-header">
       <div class="cat-icon" style="background:rgba(255,140,66,.15)">
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff8c42" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
@@ -569,7 +569,7 @@
   </div>
 
   <!-- Print Job Workflow -->
-  <div class="feat-cat fade-in">
+  <div class="feat-cat fade-in" id="jobs">
     <div class="cat-header">
       <div class="cat-icon" style="background:rgba(47,216,122,.15)">
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2fd87a" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
@@ -711,7 +711,7 @@
 </div>
 
 <!-- HOW IT WORKS -->
-<div class="wrap">
+<div class="wrap" id="how-it-works">
   <div class="fade-in">
     <div class="section-label">// how it works</div>
     <h2 class="section-title">Up and running<br>in minutes.</h2>
@@ -1185,6 +1185,9 @@
   // Active nav link on scroll
   const sections = [
     { id: 'features', label: 'Features' },
+    { id: 'inventory', label: 'Inventory' },
+    { id: 'fleet', label: 'Fleet' },
+    { id: 'jobs', label: 'Jobs' },
     { id: 'integrations', label: 'Integrations' },
     { id: 'how-it-works', label: 'How it Works' },
     { id: 'pricing', label: 'Pricing' },
