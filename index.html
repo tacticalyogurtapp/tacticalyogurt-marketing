@@ -68,12 +68,18 @@
 
     /* HERO */
     .hero { position: relative; min-height: 100vh; overflow: hidden; display: flex; align-items: center; padding: 80px 0 0; }
-    .hero::after {
-      content: ''; position: absolute; inset: 0;
+    /* HEX GRID — full page, fades past demo section */
+    .page-hex-bg {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: calc(100vh + 1100px);
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34.64' height='60'%3E%3Cpath d='M17.32,0 L34.64,10 L34.64,30 L17.32,40 L0,30 L0,10 Z' fill='none' stroke='%23a78bfa' stroke-width='3' stroke-opacity='0.04'/%3E%3Cline x1='17.32' y1='40' x2='17.32' y2='60' stroke='%23a78bfa' stroke-width='3' stroke-opacity='0.04'/%3E%3Cpath d='M17.32,0 L34.64,10 L34.64,30 L17.32,40 L0,30 L0,10 Z' fill='none' stroke='%23a78bfa' stroke-width='0.75' stroke-opacity='0.22'/%3E%3Cline x1='17.32' y1='40' x2='17.32' y2='60' stroke='%23a78bfa' stroke-width='0.75' stroke-opacity='0.22'/%3E%3C/svg%3E");
       background-size: 34.64px 60px;
-      mask-image: radial-gradient(ellipse 80% 60% at 30% 50%, black 30%, transparent 100%);
-      pointer-events: none;
+      mask-image:
+        linear-gradient(to bottom, black 30%, transparent 88%),
+        radial-gradient(ellipse 85% 100% at 30% 8%, black 15%, transparent 65%);
+      mask-composite: intersect;
+      -webkit-mask-composite: destination-in;
+      pointer-events: none; z-index: 0;
     }
     .hero-glow {
       position: absolute; inset: 0; pointer-events: none; filter: blur(40px);
@@ -480,6 +486,9 @@
   </style>
 </head>
 <body>
+
+<!-- HEX GRID BACKGROUND -->
+<div class="page-hex-bg"></div>
 
 <!-- NAV -->
 <nav>
