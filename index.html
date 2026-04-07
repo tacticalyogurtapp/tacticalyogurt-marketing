@@ -239,7 +239,7 @@
     .demo-sidebar-brand {
       display: flex; align-items: center; gap: .5rem;
       padding: 0 1rem 1.25rem; border-bottom: 1px solid var(--border);
-      font-family: var(--display); font-size: .85rem; font-weight: 600; margin-bottom: .5rem;
+      font-family: var(--display); font-size: .85rem; font-weight: 600;
     }
     .demo-sidebar-brand-text {
       background: linear-gradient(90deg,#a78bfa,#fb923c);
@@ -636,6 +636,57 @@
   <div class="stat-item"><div class="stat-num">14+</div><div class="stat-label">Feature Modules</div></div>
   <div class="stat-item"><div class="stat-num">5+</div><div class="stat-label">Market Integrations</div></div>
   <div class="stat-item"><div class="stat-num">Real-time</div><div class="stat-label">Low Stock Alerts</div></div>
+</div>
+
+<!-- INTERACTIVE DEMO -->
+<div id="demo" class="demo-section">
+  <div class="demo-header fade-in">
+    <div class="section-label">// see it in action</div>
+    <h2 class="section-title">The command center for your farm.</h2>
+    <p class="section-sub">A preview of what's coming — one dashboard for every part of your operation.</p>
+  </div>
+  <div class="demo-frame-wrap fade-in">
+    <div class="demo-browser-frame">
+      <!-- Browser chrome bar -->
+      <div class="demo-chrome">
+        <div class="demo-tl-wrap">
+          <span class="demo-tl" style="background:#ff5f57"></span>
+          <span class="demo-tl" style="background:#febc2e"></span>
+          <span class="demo-tl" style="background:#28c840"></span>
+        </div>
+        <div class="demo-url">app.tacticalyogurt.com/<span id="demo-url-path">dashboard</span></div>
+        <span class="demo-preview-tag">// preview — not final UI</span>
+      </div>
+      <!-- App shell -->
+      <div class="demo-app-shell">
+        <!-- Sidebar -->
+        <div class="demo-sidebar">
+          <div class="demo-sidebar-brand">
+            <div class="nav-dot"></div>
+            <span class="demo-sidebar-brand-text">TacticalYogurt</span>
+          </div>
+          <button class="demo-nav-item active" data-tab="dashboard" onclick="demoSwitch('dashboard')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Dashboard
+          </button>
+          <button class="demo-nav-item" data-tab="fleet" onclick="demoSwitch('fleet')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Printer Fleet
+          </button>
+          <button class="demo-nav-item" data-tab="inventory" onclick="demoSwitch('inventory')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.29 7 8.71 5 8.71-5"/><line x1="12" y1="22" x2="12" y2="12"/></svg>
+            Filament Inventory
+          </button>
+          <button class="demo-nav-item" data-tab="jobs" onclick="demoSwitch('jobs')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+            Print Jobs
+          </button>
+        </div>
+        <!-- Main content — populated by JS -->
+        <div class="demo-content" id="demo-content"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- PHOTO BREAK: PRINT FARM -->
