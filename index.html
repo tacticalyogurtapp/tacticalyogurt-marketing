@@ -237,7 +237,8 @@
       font-family: var(--mono); font-size: .68rem; color: var(--muted);
     }
     .demo-preview-tag { font-family: var(--mono); font-size: .62rem; color: #374151; white-space: nowrap; }
-    .demo-app-shell { display: flex; height: 480px; background: var(--bg); }
+    .demo-app-shell { display: flex; height: 500px; background: #0b0718; }
+    .demo-content-area { background: #110d1f; }
     .demo-sidebar {
       width: 200px; flex-shrink: 0; background: rgba(14,9,28,.95);
       border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 1.25rem 0;
@@ -262,18 +263,28 @@
     .demo-nav-item.active { color: var(--text); background: rgba(124,58,237,.15); }
     .demo-nav-item.active svg { stroke: var(--violet-light); }
     .demo-content {
-      flex: 1; overflow-y: auto; padding: 1.5rem;
+      flex: 1; overflow-y: auto; padding: 1.25rem 1.5rem;
+      background: #110d1f;
       transition: opacity .15s ease, transform .15s ease;
     }
     .demo-content.fade-out-state { opacity: 0; transform: translateY(6px); }
-    .demo-stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: .75rem; margin-bottom: 1.25rem; }
+    .demo-stat-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: .6rem; margin-bottom: 1.25rem; }
     .demo-stat-card {
       background: rgba(255,255,255,.04); border: 1px solid var(--border);
-      border-radius: 8px; padding: .85rem 1rem;
+      border-radius: 8px; padding: .75rem .85rem;
     }
-    .demo-stat-label { font-size: .62rem; color: var(--muted); font-family: var(--mono); margin-bottom: .35rem; letter-spacing: .05em; }
-    .demo-stat-num { font-family: var(--display); font-size: 1.4rem; font-weight: 700; }
-    .demo-stat-sub { font-size: .62rem; color: var(--muted); margin-top: .15rem; }
+    .demo-stat-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: .5rem; }
+    .demo-stat-label { font-size: .58rem; color: var(--muted); font-family: var(--sans); margin-bottom: .2rem; }
+    .demo-stat-num { font-family: var(--display); font-size: 1.25rem; font-weight: 700; }
+    .demo-stat-sub { font-size: .6rem; color: #ef4444; margin-top: .15rem; cursor: pointer; }
+    .demo-material-section { margin-top: 1rem; }
+    .demo-material-title { font-size: .75rem; font-weight: 600; margin-bottom: .15rem; color: var(--text); }
+    .demo-material-sub { font-size: .65rem; color: var(--muted); margin-bottom: .85rem; }
+    .demo-material-row { display: flex; align-items: center; gap: .75rem; margin-bottom: .6rem; }
+    .demo-material-label { font-size: .75rem; width: 40px; flex-shrink: 0; }
+    .demo-material-bar-wrap { flex: 1; height: 5px; background: rgba(255,255,255,.07); border-radius: 3px; overflow: hidden; }
+    .demo-material-bar { height: 100%; border-radius: 3px; background: #3b6aff; width: 0; transition: width .4s ease; }
+    .demo-material-count { font-size: .65rem; color: var(--muted); font-family: var(--mono); white-space: nowrap; width: 48px; text-align: right; }
     .demo-section-title { font-size: .65rem; color: var(--muted); font-family: var(--mono); letter-spacing: .08em; margin-bottom: .6rem; }
     .demo-activity-item {
       display: flex; align-items: flex-start; gap: .65rem;
@@ -332,7 +343,7 @@
       .demo-sidebar-brand { display: none; }
       .demo-nav-item { padding: .4rem .6rem; gap: .3rem; font-size: .7rem; margin: 0; width: auto; white-space: nowrap; }
       .demo-content { padding: 1rem; }
-      .demo-stat-grid { grid-template-columns: 1fr 1fr; }
+      .demo-stat-grid { grid-template-columns: 1fr 1fr 1fr; }
       .demo-section { padding: 4rem 1.25rem; }
     }
 
@@ -682,11 +693,11 @@
           </button>
           <button class="demo-nav-item" data-tab="fleet" onclick="demoSwitch('fleet')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-            Printer Fleet
+            Printers
           </button>
           <button class="demo-nav-item" data-tab="inventory" onclick="demoSwitch('inventory')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.29 7 8.71 5 8.71-5"/><line x1="12" y1="22" x2="12" y2="12"/></svg>
-            Filament Inventory
+            Filament
           </button>
           <button class="demo-nav-item" data-tab="jobs" onclick="demoSwitch('jobs')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
@@ -1434,13 +1445,11 @@
     // DEMO_DATA — edit this object to update the demo when app ships
     // ================================================================
     const DEMO_DATA = {
-      stats: { spools: 34, printersOnline: 4, pendingOrders: 8 },
-      activity: [
-        { time: '2m ago',  text: 'Job completed: grid-clip-v3 on Bambu X1C #1', type: 'success' },
-        { time: '8m ago',  text: 'Low stock detected: eSun PETG Amber (18%)',   type: 'warn'    },
-        { time: '14m ago', text: 'Print job started on Prusa MK4 #2',           type: 'info'    },
-        { time: '1h ago',  text: 'New order received — Etsy #4821',             type: 'info'    },
-        { time: '2h ago',  text: 'Spool added: Polymaker PLA Silk Green 1kg',   type: 'success' }
+      stats: { spools: 13, lowStock: 2, totalValue: '$174.56', totalWeight: '10.48 kg', hardwareValue: '$21.40' },
+      materials: [
+        { label: 'PLA',  count: 11, pct: 85 },
+        { label: 'PETG', count: 2,  pct: 18 },
+        { label: 'ABS',  count: 0,  pct: 0  }
       ],
       fleet: [
         { name: 'Bambu X1C #1',   status: 'printing', job: 'grid-clip-v3.3mf',   progress: 68, eta: '1h 24m' },
@@ -1467,35 +1476,47 @@
     };
 
     const URL_PATHS = { dashboard: 'dashboard', fleet: 'printers', inventory: 'inventory', jobs: 'jobs' };
-    const activityColors = { success: '#4ade80', warn: '#fb923c', info: '#a78bfa' };
 
     function renderDashboard() {
-      const d = DEMO_DATA;
+      const s = DEMO_DATA.stats;
       return `
+        <div style="font-size:.8rem;font-weight:600;margin-bottom:.9rem;color:var(--text);">Dashboard <span style="font-size:.65rem;font-weight:400;color:var(--muted);margin-left:.35rem;">Overview of your print farm inventory</span></div>
         <div class="demo-stat-grid">
           <div class="demo-stat-card">
-            <div class="demo-stat-label">// SPOOLS</div>
-            <div class="demo-stat-num" style="color:#a78bfa">${d.stats.spools}</div>
-            <div class="demo-stat-sub">12 materials tracked</div>
+            <div class="demo-stat-icon" style="background:rgba(59,130,246,.15)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.29 7 8.71 5 8.71-5"/><line x1="12" y1="22" x2="12" y2="12"/></svg></div>
+            <div class="demo-stat-label">Total Spools</div>
+            <div class="demo-stat-num">${s.spools}</div>
           </div>
           <div class="demo-stat-card">
-            <div class="demo-stat-label">// PRINTING</div>
-            <div class="demo-stat-num" style="color:#fb923c">${d.stats.printersOnline}/5</div>
-            <div class="demo-stat-sub">printers active</div>
+            <div class="demo-stat-icon" style="background:rgba(239,68,68,.15)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div class="demo-stat-label">Low Stock</div>
+            <div class="demo-stat-num" style="color:#f87171">${s.lowStock}</div>
+            <div class="demo-stat-sub">View low stock items →</div>
           </div>
           <div class="demo-stat-card">
-            <div class="demo-stat-label">// ORDERS</div>
-            <div class="demo-stat-num" style="color:#4ade80">${d.stats.pendingOrders}</div>
-            <div class="demo-stat-sub">pending fulfillment</div>
+            <div class="demo-stat-icon" style="background:rgba(74,222,128,.15)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+            <div class="demo-stat-label">Total Value</div>
+            <div class="demo-stat-num">${s.totalValue}</div>
+          </div>
+          <div class="demo-stat-card">
+            <div class="demo-stat-icon" style="background:rgba(96,165,250,.15)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12 12 8 16 12"/><line x1="12" y1="16" x2="12" y2="8"/></svg></div>
+            <div class="demo-stat-label">Total Weight</div>
+            <div class="demo-stat-num">${s.totalWeight}</div>
+          </div>
+          <div class="demo-stat-card">
+            <div class="demo-stat-icon" style="background:rgba(251,191,36,.15)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+            <div class="demo-stat-label">Hardware Value</div>
+            <div class="demo-stat-num">${s.hardwareValue}</div>
           </div>
         </div>
-        <div class="demo-section-title">// RECENT ACTIVITY</div>
-        <div>
-          ${d.activity.map(a => `
-            <div class="demo-activity-item">
-              <span class="demo-activity-dot" style="background:${activityColors[a.type]}"></span>
-              <span class="demo-activity-text">${a.text}</span>
-              <span class="demo-activity-time">${a.time}</span>
+        <div class="demo-material-section">
+          <div class="demo-material-title">Inventory by Material</div>
+          <div class="demo-material-sub">Distribution of your filament stock</div>
+          ${DEMO_DATA.materials.filter(m => m.count > 0).map(m => `
+            <div class="demo-material-row">
+              <span class="demo-material-label">${m.label}</span>
+              <div class="demo-material-bar-wrap"><div class="demo-material-bar" data-width="${m.pct}%"></div></div>
+              <span class="demo-material-count">${m.count} spools</span>
             </div>
           `).join('')}
         </div>
