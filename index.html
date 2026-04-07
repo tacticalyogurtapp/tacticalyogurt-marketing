@@ -26,7 +26,7 @@
       --display:      'Outfit', sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+    html { scroll-behavior: smooth; scroll-padding-top: clamp(64px, 5vw, 96px); }
     body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
     body::before {
       content: '';
@@ -93,7 +93,7 @@
       padding: 5rem 3rem; position: relative; z-index: 1;
     }
     .hero-text { display: flex; flex-direction: column; position: relative; z-index: 1; }
-    h1 { font-family: var(--display); font-size: clamp(2rem,3.5vw,3.25rem); font-weight: 700; line-height: 1.1; letter-spacing: -.025em; animation: fadeUp .7s .1s ease both; }
+    h1 { font-family: var(--display); font-size: clamp(2rem,3.5vw,5rem); font-weight: 700; line-height: 1.1; letter-spacing: -.025em; animation: fadeUp .7s .1s ease both; }
     h1 span { background: linear-gradient(90deg, #a78bfa 0%, #fb923c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .hero-tag {
       display: inline-flex; align-items: center; gap: .6rem;
@@ -139,7 +139,7 @@
     /* WRAP */
     .wrap { position: relative; z-index: 1; padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
     .section-label { font-family: var(--mono); font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--blue); margin-bottom: .75rem; }
-    .section-title { font-family: var(--display); font-size: clamp(1.4rem,3vw,2rem); font-weight: 600; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 1rem; }
+    .section-title { font-family: var(--display); font-size: clamp(1.4rem,2.5vw,2.8rem); font-weight: 600; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 1rem; }
     .section-sub { color: var(--muted); font-size: 1rem; max-width: 520px; line-height: 1.75; }
 
     /* FEATURE CATEGORIES */
@@ -385,6 +385,39 @@
       .stat-item { min-width: 130px; padding: 1.25rem 1rem; }
       footer { flex-direction: column; text-align: center; }
       .cta-banner { padding: 2.5rem 1.5rem; }
+    }
+
+    /* WIDE SCREENS — 1440p */
+    @media (min-width: 1440px) {
+      nav { height: 72px; padding: 0 clamp(2rem, 4vw, 6rem); }
+      .nav-logo { font-size: 1.05rem; }
+      .nav-links a { font-size: .875rem; padding: .4rem .65rem; }
+      .nav-cta { font-size: .875rem; padding: .5rem 1.3rem; }
+      .nav-cta-outline { font-size: .875rem; padding: .5rem 1.3rem; }
+      .nav-divider { margin: 0 2rem; }
+      .hero-inner { max-width: 1400px; }
+      .hero-sub { max-width: 520px; }
+      .wrap { max-width: 1300px; }
+      .split { max-width: 1300px; }
+      .demo-frame-wrap, .demo-header { max-width: 1300px; }
+      .cta-wrap { max-width: 1300px; }
+    }
+
+    /* WIDE SCREENS — 2K+ / ultra-wide */
+    @media (min-width: 2000px) {
+      nav { height: 80px; padding: 0 6vw; }
+      .nav-logo { font-size: 1.15rem; }
+      .nav-links a { font-size: 1rem; padding: .45rem .75rem; }
+      .nav-cta { font-size: 1rem; padding: .55rem 1.5rem; }
+      .nav-cta-outline { font-size: 1rem; padding: .55rem 1.5rem; }
+      body { font-size: 18px; }
+      .hero-inner { max-width: 1700px; padding: 6rem 4vw; }
+      .hero-sub { max-width: 580px; font-size: 1.125rem; }
+      .wrap { max-width: 1600px; }
+      .split { max-width: 1600px; }
+      .demo-frame-wrap, .demo-header { max-width: 1600px; }
+      .cta-wrap { max-width: 1600px; }
+      .demo-app-shell { height: 580px; }
     }
 
   /* MODAL */
