@@ -487,6 +487,7 @@
   <div class="nav-divider"></div>
   <ul class="nav-links">
     <li><a href="#">Home</a></li>
+    <li><a href="#demo">Demo</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#inventory">Inventory</a></li>
     <li><a href="#fleet">Fleet</a></li>
@@ -508,6 +509,7 @@
 <!-- MOBILE NAV DRAWER -->
 <div class="nav-mobile" id="mobileMenu">
   <a href="#" onclick="closeMenu()">Home</a>
+  <a href="#demo" onclick="closeMenu()">Demo</a>
   <a href="#features" onclick="closeMenu()">Features</a>
   <a href="#integrations" onclick="closeMenu()">Integrations</a>
   <a href="#how-it-works" onclick="closeMenu()">How it Works</a>
@@ -1358,6 +1360,7 @@
 
   // Active nav link on scroll
   const sections = [
+    { id: 'demo', label: 'Demo' },
     { id: 'features', label: 'Features' },
     { id: 'inventory', label: 'Inventory' },
     { id: 'fleet', label: 'Fleet' },
