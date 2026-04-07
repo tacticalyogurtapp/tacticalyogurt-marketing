@@ -1415,6 +1415,216 @@
       }, 250);
     }, 2500);
   }
+
+  // ---- INTERACTIVE DEMO ----
+  (function() {
+    // ================================================================
+    // DEMO_DATA — edit this object to update the demo when app ships
+    // ================================================================
+    const DEMO_DATA = {
+      stats: { spools: 34, printersOnline: 4, pendingOrders: 8 },
+      activity: [
+        { time: '2m ago',  text: 'Job completed: grid-clip-v3 on Bambu X1C #1', type: 'success' },
+        { time: '8m ago',  text: 'Low stock detected: eSun PETG Amber (18%)',   type: 'warn'    },
+        { time: '14m ago', text: 'Print job started on Prusa MK4 #2',           type: 'info'    },
+        { time: '1h ago',  text: 'New order received — Etsy #4821',             type: 'info'    },
+        { time: '2h ago',  text: 'Spool added: Polymaker PLA Silk Green 1kg',   type: 'success' }
+      ],
+      fleet: [
+        { name: 'Bambu X1C #1',   status: 'printing', job: 'grid-clip-v3.3mf',   progress: 68, eta: '1h 24m' },
+        { name: 'Prusa MK4 #2',   status: 'printing', job: 'bracket-mount.3mf',  progress: 31, eta: '3h 02m' },
+        { name: 'Bambu A1 #3',    status: 'idle',     job: null,                  progress: 0,  eta: null     },
+        { name: 'Bambu X1C #4',   status: 'printing', job: 'phone-stand-v2.3mf', progress: 89, eta: '12m'    },
+        { name: 'Creality K1 #5', status: 'idle',     job: null,                  progress: 0,  eta: null     }
+      ],
+      inventory: [
+        { color: '#a78bfa', name: 'Bambu PLA Matte',     variant: 'Purple', pct: 78 },
+        { color: '#fb923c', name: 'eSun PETG',           variant: 'Amber',  pct: 18 },
+        { color: '#4ade80', name: 'Polymaker PLA Silk',  variant: 'Green',  pct: 91 },
+        { color: '#60a5fa', name: 'Bambu PLA Basic',     variant: 'Blue',   pct: 55 },
+        { color: '#f9fafb', name: 'eSun PLA+',           variant: 'White',  pct: 43 },
+        { color: '#f87171', name: 'Polymaker PolyTerra', variant: 'Red',    pct: 12 }
+      ],
+      jobs: [
+        { file: 'grid-clip-v3.3mf',   printer: 'Bambu X1C #1',   status: 'in-progress', stars: null },
+        { file: 'phone-stand-v2.3mf', printer: 'Bambu X1C #4',   status: 'in-progress', stars: null },
+        { file: 'bracket-mount.3mf',  printer: 'Prusa MK4 #2',   status: 'completed',   stars: 5    },
+        { file: 'wall-hook-v5.3mf',   printer: 'Bambu A1 #3',    status: 'completed',   stars: 4    },
+        { file: 'nozzle-test-v1.3mf', printer: 'Creality K1 #5', status: 'failed',      stars: 1    }
+      ]
+    };
+
+    const URL_PATHS = { dashboard: 'dashboard', fleet: 'printers', inventory: 'inventory', jobs: 'jobs' };
+    const activityColors = { success: '#4ade80', warn: '#fb923c', info: '#a78bfa' };
+
+    function renderDashboard() {
+      const d = DEMO_DATA;
+      return `
+        <div class="demo-stat-grid">
+          <div class="demo-stat-card">
+            <div class="demo-stat-label">// SPOOLS</div>
+            <div class="demo-stat-num" style="color:#a78bfa">${d.stats.spools}</div>
+            <div class="demo-stat-sub">12 materials tracked</div>
+          </div>
+          <div class="demo-stat-card">
+            <div class="demo-stat-label">// PRINTING</div>
+            <div class="demo-stat-num" style="color:#fb923c">${d.stats.printersOnline}/5</div>
+            <div class="demo-stat-sub">printers active</div>
+          </div>
+          <div class="demo-stat-card">
+            <div class="demo-stat-label">// ORDERS</div>
+            <div class="demo-stat-num" style="color:#4ade80">${d.stats.pendingOrders}</div>
+            <div class="demo-stat-sub">pending fulfillment</div>
+          </div>
+        </div>
+        <div class="demo-section-title">// RECENT ACTIVITY</div>
+        <div>
+          ${d.activity.map(a => `
+            <div class="demo-activity-item">
+              <span class="demo-activity-dot" style="background:${activityColors[a.type]}"></span>
+              <span class="demo-activity-text">${a.text}</span>
+              <span class="demo-activity-time">${a.time}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderFleet() {
+      return `
+        <table class="demo-table">
+          <thead>
+            <tr>
+              <th style="width:16px"></th>
+              <th>PRINTER</th>
+              <th>CURRENT JOB</th>
+              <th>PROGRESS</th>
+              <th>ETA</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${DEMO_DATA.fleet.map(p => `
+              <tr>
+                <td><span class="demo-status-dot ${p.status}"></span></td>
+                <td>${p.name}</td>
+                <td><span class="demo-job-name">${p.job ? p.job : '<span style="color:#374151">idle</span>'}</span></td>
+                <td>
+                  ${p.status === 'printing'
+                    ? `<div class="demo-bar-wrap"><div class="demo-bar" data-width="${p.progress}%"></div></div>`
+                    : '<span style="color:#374151;font-family:var(--mono);font-size:.7rem">—</span>'}
+                </td>
+                <td><span class="demo-eta">${p.eta ? p.eta : '<span style="color:#374151">—</span>'}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderInventory() {
+      return `
+        <div class="demo-section-title" style="margin-bottom:.75rem">// FILAMENT INVENTORY — ${DEMO_DATA.inventory.length} SPOOLS</div>
+        ${DEMO_DATA.inventory.map(s => `
+          <div class="demo-spool-row">
+            <span class="demo-spool-dot" style="background:${s.color}"></span>
+            <span class="demo-spool-name">${s.name} <span class="demo-spool-variant">— ${s.variant}</span></span>
+            <div class="demo-spool-bar-wrap">
+              <div class="demo-spool-bar" style="background:${s.color}" data-width="${s.pct}%"></div>
+            </div>
+            <span class="demo-spool-pct">${s.pct}%</span>
+            ${s.pct < 20 ? '<span class="demo-low-badge">Low</span>' : ''}
+          </div>
+        `).join('')}
+      `;
+    }
+
+    function renderJobs() {
+      const statusLabel = { 'completed': 'Completed', 'in-progress': 'In Progress', 'failed': 'Failed' };
+      return `
+        <table class="demo-table">
+          <thead>
+            <tr>
+              <th>FILE</th>
+              <th>PRINTER</th>
+              <th>STATUS</th>
+              <th>RATING</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${DEMO_DATA.jobs.map(j => `
+              <tr>
+                <td><span class="demo-job-name">${j.file}</span></td>
+                <td style="font-size:.78rem;color:var(--muted)">${j.printer}</td>
+                <td><span class="demo-status-badge ${j.status}">${statusLabel[j.status]}</span></td>
+                <td>
+                  ${j.stars !== null
+                    ? `<div class="demo-stars">${[1,2,3,4,5].map(i => `<span class="demo-star ${i <= j.stars ? 'filled' : 'empty'}">★</span>`).join('')}</div>`
+                    : '<span style="color:#374151;font-family:var(--mono);font-size:.7rem">—</span>'}
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    const renderers = { dashboard: renderDashboard, fleet: renderFleet, inventory: renderInventory, jobs: renderJobs };
+    let activeTab = 'dashboard';
+
+    function animateBars(container) {
+      container.querySelectorAll('[data-width]').forEach(function(bar) {
+        requestAnimationFrame(function() { bar.style.width = bar.dataset.width; });
+      });
+    }
+
+    window.demoSwitch = function(tab) {
+      if (tab === activeTab) return;
+      activeTab = tab;
+
+      document.querySelectorAll('.demo-nav-item').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.tab === tab);
+      });
+
+      var urlPath = document.getElementById('demo-url-path');
+      if (urlPath) urlPath.textContent = URL_PATHS[tab];
+
+      var content = document.getElementById('demo-content');
+      if (!content) return;
+      content.classList.add('fade-out-state');
+      setTimeout(function() {
+        content.innerHTML = renderers[tab]();
+        content.classList.remove('fade-out-state');
+        animateBars(content);
+      }, 150);
+    };
+
+    // Initial render
+    var initContent = document.getElementById('demo-content');
+    if (initContent) {
+      initContent.innerHTML = renderDashboard();
+      animateBars(initContent);
+    }
+
+    // Auto-cycle once on first scroll into view
+    var demoSection = document.getElementById('demo');
+    if (demoSection) {
+      var demoObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !entry.target.dataset.cycled) {
+            entry.target.dataset.cycled = '1';
+            var tabs = ['dashboard', 'fleet', 'inventory', 'jobs'];
+            var i = 0;
+            var cycle = setInterval(function() {
+              i++;
+              if (i >= tabs.length) { clearInterval(cycle); demoSwitch('dashboard'); return; }
+              demoSwitch(tabs[i]);
+            }, 1500);
+          }
+        });
+      }, { threshold: 0.3 });
+      demoObs.observe(demoSection);
+    }
+  })();
 </script>
 </body>
 </html>
