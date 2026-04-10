@@ -2062,6 +2062,11 @@
 
     const renderers = { dashboard: renderDashboard, fleet: renderFleet, inventory: renderInventory, jobs: renderJobs, parts: renderParts, hardware: renderHardware, reports: renderReports, markets: renderMarkets };
     let activeTab = 'dashboard';
+    var autoCycle = null;
+
+    function stopCycle() {
+      if (autoCycle) { clearInterval(autoCycle); autoCycle = null; }
+    }
 
     function animateBars(container) {
       container.querySelectorAll('[data-width]').forEach(function(bar) {
@@ -2069,7 +2074,8 @@
       });
     }
 
-    window.demoSwitch = function(tab) {
+    window.demoSwitch = function(tab, fromCycle) {
+      if (!fromCycle) stopCycle();
       if (tab === activeTab) return;
       activeTab = tab;
 
@@ -2106,10 +2112,10 @@
             entry.target.dataset.cycled = '1';
             var tabs = ['dashboard', 'inventory', 'fleet', 'jobs', 'parts', 'hardware', 'reports', 'markets'];
             var i = 0;
-            var cycle = setInterval(function() {
+            autoCycle = setInterval(function() {
               i++;
-              if (i >= tabs.length) { clearInterval(cycle); demoSwitch('dashboard'); return; }
-              demoSwitch(tabs[i]);
+              if (i >= tabs.length) { stopCycle(); demoSwitch('dashboard', true); return; }
+              demoSwitch(tabs[i], true);
             }, 1500);
           }
         });
