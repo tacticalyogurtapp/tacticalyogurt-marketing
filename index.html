@@ -784,19 +784,19 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
             Print Jobs
           </button>
-          <button class="demo-nav-item" style="opacity:.4;cursor:default" tabindex="-1">
+          <button class="demo-nav-item" data-tab="parts" onclick="demoSwitch('parts')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 9.4l-9-5.19"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" y1="22" x2="12" y2="12"/></svg>
             Printed Parts
           </button>
-          <button class="demo-nav-item" style="opacity:.4;cursor:default" tabindex="-1">
+          <button class="demo-nav-item" data-tab="hardware" onclick="demoSwitch('hardware')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
             Hardware
           </button>
-          <button class="demo-nav-item" style="opacity:.4;cursor:default" tabindex="-1">
+          <button class="demo-nav-item" data-tab="reports" onclick="demoSwitch('reports')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
             Reports
           </button>
-          <button class="demo-nav-item" style="opacity:.4;cursor:default" tabindex="-1">
+          <button class="demo-nav-item" data-tab="markets" onclick="demoSwitch('markets')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             Markets
           </button>
@@ -1684,11 +1684,11 @@
         { label: 'ABS',  count: 0,  pct: 0  }
       ],
       fleet: [
-        { name: 'Bambu X1C #1',   status: 'printing', job: 'grid-clip-v3.3mf',   progress: 68, eta: '1h 24m' },
-        { name: 'Prusa MK4 #2',   status: 'printing', job: 'bracket-mount.3mf',  progress: 31, eta: '3h 02m' },
-        { name: 'Bambu A1 #3',    status: 'idle',     job: null,                  progress: 0,  eta: null     },
-        { name: 'Bambu X1C #4',   status: 'printing', job: 'phone-stand-v2.3mf', progress: 89, eta: '12m'    },
-        { name: 'Creality K1 #5', status: 'idle',     job: null,                  progress: 0,  eta: null     }
+        { name: 'Bambu X1C #1',   model: 'X1 Carbon', status: 'printing', job: 'grid-clip-v3.3mf',   progress: 68, cost: '1,499', earned: '1,842.50', parts: 34, paidOff: true  },
+        { name: 'Prusa MK4 #2',   model: 'MK4',       status: 'printing', job: 'bracket-mount.3mf',  progress: 31, cost: '799',   earned: '612.80',   parts: 18, paidOff: false },
+        { name: 'Bambu A1 #3',    model: 'A1',         status: 'idle',     job: null,                 progress: 0,  cost: '599',   earned: '488.20',   parts: 12, paidOff: false },
+        { name: 'Bambu X1C #4',   model: 'X1 Carbon', status: 'printing', job: 'phone-stand-v2.3mf', progress: 89, cost: '1,499', earned: '220.40',   parts: 6,  paidOff: false },
+        { name: 'Creality K1 #5', model: 'K1',         status: 'idle',     job: null,                 progress: 0,  cost: '399',   earned: '94.60',    parts: 4,  paidOff: false }
       ],
       inventory: [
         { color: '#a78bfa', name: 'Bambu',     variant: 'PLA Matte — Purple',  mat: 'PLA',  status: 'OPEN',   pct: 78,  value: '$18.50' },
@@ -1704,10 +1704,39 @@
         { file: 'bracket-mount.3mf',  printer: 'Prusa MK4 #2',   status: 'completed',   stars: 5    },
         { file: 'wall-hook-v5.3mf',   printer: 'Bambu A1 #3',    status: 'completed',   stars: 4    },
         { file: 'nozzle-test-v1.3mf', printer: 'Creality K1 #5', status: 'failed',      stars: 1    }
-      ]
+      ],
+      parts: [
+        { name: 'Gantry Knob',      desc: 'X-axis tension knob',       cost: '$2.15', msrp: '$4.99', markup: '+132%', stock: 24, low: false },
+        { name: 'Fan Shroud V2',    desc: 'Hotend cooling shroud',      cost: '$1.80', msrp: '$3.49', markup: '+94%',  stock: 8,  low: true  },
+        { name: 'Spool Bracket',    desc: 'Wall-mount spool holder',    cost: '$3.40', msrp: '$7.99', markup: '+135%', stock: 15, low: false },
+        { name: 'Cable Chain Link', desc: 'Y-axis drag chain segment',  cost: '$0.65', msrp: '$1.50', markup: '+131%', stock: 42, low: false },
+        { name: 'Bed Level Knob',   desc: 'Thumb wheel adjuster',       cost: '$1.20', msrp: '$2.99', markup: '+149%', stock: 3,  low: true  },
+        { name: 'Door Handle',      desc: 'Enclosure panel grip',       cost: '$2.80', msrp: '$5.99', markup: '+114%', stock: 11, low: false }
+      ],
+      hardware: [
+        { name: 'M3 Hex Insert',        cat: 'Fasteners',   spec: '5mm brass',      cost: '$0.0285', stock: 456, threshold: 50,  low: false },
+        { name: 'M4×16 Socket Cap',     cat: 'Fasteners',   spec: 'stainless steel',cost: '$0.0420', stock: 38,  threshold: 100, low: true  },
+        { name: '624ZZ Bearing',        cat: 'Bearings',    spec: '4×13×5mm',       cost: '$0.3800', stock: 24,  threshold: 10,  low: false },
+        { name: '5mm Compression Spr.', cat: 'Springs',     spec: 'OD 6mm L20',     cost: '$0.1200', stock: 15,  threshold: 20,  low: true  },
+        { name: 'NTC 100K Thermistor',  cat: 'Electronics', spec: 'B3950',          cost: '$0.8500', stock: 12,  threshold: 5,   low: false },
+        { name: 'M3×10 SHCS',           cat: 'Fasteners',   spec: 'stainless steel',cost: '$0.0180', stock: 820, threshold: 200, low: false }
+      ],
+      markets: [
+        { name: 'Downtown Makers Market', status: 'UPCOMING',  date: 'Sat, Apr 19, 2026', location: 'City Park Pavilion, Denver, CO', fee: '$35.00', wishlist: 12 },
+        { name: 'Boulder Craft Fair',     status: 'SEARCHING', date: 'Sun, May 11, 2026', location: 'Pearl Street Mall, Boulder, CO', fee: null,      wishlist: 0  },
+        { name: 'Littleton Art Festival', status: 'COMPLETED', date: 'Sat, Mar 8, 2026',  location: 'Bega Park, Littleton, CO',       fee: '$50.00', wishlist: 9  }
+      ],
+      reports: {
+        summary: { jobs: 47, filamentUsed: '8.42 kg', hwCost: '$12.40', assemblyHrs: '14.5 hrs' },
+        byMaterial: [
+          { mat: 'PLA',  grams: '6,842 g', cost: '$68.42', jobs: 38 },
+          { mat: 'PETG', grams: '1,240 g', cost: '$15.50', jobs: 7  },
+          { mat: 'TPU',  grams: '340 g',   cost: '$6.80',  jobs: 2  }
+        ]
+      }
     };
 
-    const URL_PATHS = { dashboard: 'dashboard', fleet: 'printers', inventory: 'filament', jobs: 'jobs' };
+    const URL_PATHS = { dashboard: 'dashboard', fleet: 'printers', inventory: 'filament', jobs: 'jobs', parts: 'parts', hardware: 'hardware', reports: 'reports', markets: 'markets' };
 
     function renderDashboard() {
       const s = DEMO_DATA.stats;
@@ -1757,32 +1786,204 @@
 
     function renderFleet() {
       return `
+        <div style="font-size:.8rem;font-weight:600;margin-bottom:.85rem;color:var(--text);">Printers <span style="font-size:.65rem;font-weight:400;color:var(--muted);margin-left:.35rem;">3 printing &nbsp;·&nbsp; 2 idle</span></div>
         <table class="demo-table">
-          <thead>
-            <tr>
-              <th style="width:16px"></th>
-              <th>PRINTER</th>
-              <th>CURRENT JOB</th>
-              <th>PROGRESS</th>
-              <th>ETA</th>
-            </tr>
-          </thead>
+          <thead><tr>
+            <th style="width:16px"></th>
+            <th>PRINTER</th>
+            <th>MODEL</th>
+            <th>CURRENT JOB</th>
+            <th>PROGRESS</th>
+            <th>COST vs. EARNED</th>
+          </tr></thead>
           <tbody>
             ${DEMO_DATA.fleet.map(p => `
               <tr>
                 <td><span class="demo-status-dot ${p.status}"></span></td>
-                <td>${p.name}</td>
+                <td style="font-weight:500;color:var(--text)">${p.name} ${p.paidOff ? '🥳' : ''}</td>
+                <td style="font-size:.72rem;color:var(--muted)">${p.model}</td>
                 <td><span class="demo-job-name">${p.job ? p.job : '<span style="color:#374151">idle</span>'}</span></td>
                 <td>
                   ${p.status === 'printing'
-                    ? `<div class="demo-bar-wrap"><div class="demo-bar" data-width="${p.progress}%"></div></div>`
+                    ? `<div style="display:flex;align-items:center;gap:.4rem"><div class="demo-bar-wrap" style="width:56px"><div class="demo-bar" data-width="${p.progress}%"></div></div><span style="font-family:var(--mono);font-size:.67rem;color:var(--muted)">${p.progress}%</span></div>`
                     : '<span style="color:#374151;font-family:var(--mono);font-size:.7rem">—</span>'}
                 </td>
-                <td><span class="demo-eta">${p.eta ? p.eta : '<span style="color:#374151">—</span>'}</span></td>
+                <td>
+                  <div style="font-family:var(--mono);font-size:.72rem;color:${p.paidOff ? '#4ade80' : 'var(--muted)'}">$${p.cost} / $${p.earned}</div>
+                  <div style="font-size:.62rem;color:var(--muted)">${p.parts} parts produced</div>
+                </td>
               </tr>
             `).join('')}
           </tbody>
         </table>
+      `;
+    }
+
+    function renderParts() {
+      return `
+        <div style="font-size:.8rem;font-weight:600;margin-bottom:.85rem;color:var(--text);">Printed Parts <span style="font-size:.65rem;font-weight:400;color:var(--muted);margin-left:.35rem;">6 parts &nbsp;·&nbsp; 103 total in stock &nbsp;·&nbsp; $421.40 potential revenue</span></div>
+        <table class="demo-table">
+          <thead><tr>
+            <th style="width:28px"></th>
+            <th>PART</th>
+            <th>COST</th>
+            <th>MSRP</th>
+            <th>IN STOCK</th>
+          </tr></thead>
+          <tbody>
+            ${DEMO_DATA.parts.map(p => `
+              <tr>
+                <td><div style="width:24px;height:24px;border-radius:4px;background:#27272a;border:1px solid #3f3f46;display:flex;align-items:center;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#52525b" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" y1="22" x2="12" y2="12"/></svg></div></td>
+                <td>
+                  <div style="font-size:.78rem;font-weight:500;color:var(--text)">${p.name} ${p.low ? '<span class="demo-low-badge">Low</span>' : ''}</div>
+                  <div style="font-size:.68rem;color:var(--muted)">${p.desc}</div>
+                </td>
+                <td style="font-family:var(--mono);font-size:.72rem;color:var(--muted)">${p.cost}</td>
+                <td>
+                  <div style="font-family:var(--mono);font-size:.78rem;color:var(--text)">${p.msrp}</div>
+                  <div style="font-size:.62rem;color:#818cf8">${p.markup}</div>
+                </td>
+                <td style="font-family:var(--mono);font-size:.78rem;font-weight:600;color:${p.low ? '#f59e0b' : 'var(--text)'}">${p.stock}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderHardware() {
+      return `
+        <div style="font-size:.8rem;font-weight:600;margin-bottom:.85rem;color:var(--text);">Hardware Inventory <span style="font-size:.65rem;font-weight:400;color:var(--muted);margin-left:.35rem;">6 items &nbsp;·&nbsp; 2 low stock</span></div>
+        <table class="demo-table">
+          <thead><tr>
+            <th>NAME</th>
+            <th>CATEGORY</th>
+            <th>SPEC</th>
+            <th>UNIT COST</th>
+            <th>IN STOCK</th>
+            <th>THRESHOLD</th>
+          </tr></thead>
+          <tbody>
+            ${DEMO_DATA.hardware.map(h => `
+              <tr>
+                <td>
+                  <span style="font-size:.78rem;color:var(--text);font-weight:500">${h.name}</span>
+                  ${h.low ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="display:inline;vertical-align:middle;margin-left:.3rem"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' : ''}
+                </td>
+                <td><span style="font-size:.65rem;font-family:var(--mono);padding:.15rem .5rem;border-radius:100px;border:1px solid #3f3f46;color:var(--muted)">${h.cat}</span></td>
+                <td style="font-size:.72rem;color:var(--muted)">${h.spec}</td>
+                <td style="font-family:var(--mono);font-size:.72rem;color:var(--muted)">${h.cost}</td>
+                <td style="font-family:var(--mono);font-size:.78rem;font-weight:600;color:${h.low ? '#f59e0b' : 'var(--text)'}">${h.stock.toLocaleString()}</td>
+                <td style="font-family:var(--mono);font-size:.72rem;color:var(--muted)">${h.threshold}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <div style="margin-top:1.1rem;padding:.9rem 1rem;background:#27272a;border:1px solid #3f3f46;border-radius:8px">
+          <div style="font-size:.72rem;font-weight:600;color:var(--text);margin-bottom:.65rem;display:flex;align-items:center;gap:.4rem">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Recent Stock Activity
+          </div>
+          <div style="display:flex;flex-direction:column;gap:.4rem">
+            <div style="display:flex;gap:.75rem;align-items:center;padding:.3rem .5rem;border-radius:5px;background:rgba(255,255,255,.02)"><span style="font-family:var(--mono);font-size:.72rem;color:#4ade80;min-width:36px">+500</span><span style="font-size:.78rem;color:var(--text)">M3 Hex Insert</span><span style="font-size:.67rem;color:var(--muted);margin-left:auto">2h ago</span></div>
+            <div style="display:flex;gap:.75rem;align-items:center;padding:.3rem .5rem;border-radius:5px;background:rgba(255,255,255,.02)"><span style="font-family:var(--mono);font-size:.72rem;color:#f87171;min-width:36px">−24</span><span style="font-size:.78rem;color:var(--text)">M4×16 Socket Cap</span><span style="font-size:.67rem;color:var(--muted);margin-left:auto">yesterday</span></div>
+            <div style="display:flex;gap:.75rem;align-items:center;padding:.3rem .5rem;border-radius:5px;background:rgba(255,255,255,.02)"><span style="font-family:var(--mono);font-size:.72rem;color:#4ade80;min-width:36px">+50</span><span style="font-size:.78rem;color:var(--text)">624ZZ Bearing</span><span style="font-size:.67rem;color:var(--muted);margin-left:auto">3 days ago</span></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderReports() {
+      const r = DEMO_DATA.reports;
+      return `
+        <div style="font-size:.8rem;font-weight:600;margin-bottom:.85rem;color:var(--text);">Reports <span style="font-size:.65rem;font-weight:400;color:var(--muted);margin-left:.35rem;">Last 30 days</span></div>
+        <div class="demo-stat-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.1rem">
+          <div class="demo-stat-card">
+            <div class="demo-stat-icon" style="background:rgba(99,102,241,.15)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+            <div class="demo-stat-label">Print Jobs</div>
+            <div class="demo-stat-num">${r.summary.jobs}</div>
+          </div>
+          <div class="demo-stat-card">
+            <div class="demo-stat-icon" style="background:rgba(99,102,241,.15)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.29 7 8.71 5 8.71-5"/><line x1="12" y1="22" x2="12" y2="12"/></svg></div>
+            <div class="demo-stat-label">Filament Used</div>
+            <div class="demo-stat-num">${r.summary.filamentUsed}</div>
+          </div>
+          <div class="demo-stat-card">
+            <div class="demo-stat-icon" style="background:rgba(245,158,11,.15)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+            <div class="demo-stat-label">Hardware Cost</div>
+            <div class="demo-stat-num">${r.summary.hwCost}</div>
+          </div>
+          <div class="demo-stat-card">
+            <div class="demo-stat-icon" style="background:rgba(74,222,128,.15)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div class="demo-stat-label">Assembly Hours</div>
+            <div class="demo-stat-num">${r.summary.assemblyHrs}</div>
+          </div>
+        </div>
+        <div style="font-size:.65rem;font-weight:600;color:var(--muted);letter-spacing:.08em;font-family:var(--mono);margin-bottom:.6rem">FILAMENT USAGE — BY MATERIAL</div>
+        <table class="demo-table">
+          <thead><tr>
+            <th>MATERIAL</th>
+            <th style="text-align:right">GRAMS USED</th>
+            <th style="text-align:right">MATERIAL COST</th>
+            <th style="text-align:right">JOBS</th>
+          </tr></thead>
+          <tbody>
+            ${r.byMaterial.map(m => `
+              <tr>
+                <td style="font-weight:500;color:var(--text)">${m.mat}</td>
+                <td style="text-align:right;font-family:var(--mono);font-size:.72rem">${m.grams}</td>
+                <td style="text-align:right;font-family:var(--mono);font-size:.72rem">${m.cost}</td>
+                <td style="text-align:right;font-family:var(--mono);font-size:.72rem">${m.jobs}</td>
+              </tr>
+            `).join('')}
+            <tr style="background:rgba(255,255,255,.02)">
+              <td style="font-weight:600;color:var(--text)">Total</td>
+              <td style="text-align:right;font-family:var(--mono);font-size:.72rem;font-weight:600;color:var(--text)">8,422 g</td>
+              <td style="text-align:right;font-family:var(--mono);font-size:.72rem;font-weight:600;color:var(--text)">$90.72</td>
+              <td style="text-align:right;font-family:var(--mono);font-size:.72rem;font-weight:600;color:var(--text)">47</td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderMarkets() {
+      const statusStyle = {
+        UPCOMING:  'border:1px solid rgba(16,185,129,.4);background:rgba(16,185,129,.08);color:#34d399',
+        SEARCHING: 'border:1px solid #3f3f46;background:rgba(255,255,255,.04);color:#71717a',
+        COMPLETED: 'border:1px solid rgba(14,165,233,.4);background:rgba(14,165,233,.08);color:#38bdf8',
+        CANCELLED: 'border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#f87171'
+      };
+      return `
+        <div style="font-size:.8rem;font-weight:600;margin-bottom:.85rem;color:var(--text);">Markets <span style="font-size:.65rem;font-weight:400;color:var(--muted);margin-left:.35rem;">1 upcoming &nbsp;·&nbsp; 1 searching &nbsp;·&nbsp; 1 completed</span></div>
+        <div style="display:flex;flex-direction:column;gap:.6rem">
+          ${DEMO_DATA.markets.map(m => `
+            <div style="background:#27272a;border:1px solid #3f3f46;border-radius:8px;padding:.9rem 1rem">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem">
+                <div style="min-width:0;flex:1">
+                  <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;flex-wrap:wrap">
+                    <span style="font-size:.85rem;font-weight:600;color:var(--text)">${m.name}</span>
+                    <span style="font-size:.6rem;font-family:var(--mono);padding:.15rem .5rem;border-radius:100px;letter-spacing:.05em;${statusStyle[m.status]}">${m.status}</span>
+                  </div>
+                  <div style="display:flex;gap:1.25rem;flex-wrap:wrap">
+                    <span style="font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:.3rem">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                      ${m.date}
+                    </span>
+                    <span style="font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:.3rem">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      ${m.location}
+                    </span>
+                  </div>
+                </div>
+                <div style="display:flex;gap:.75rem;flex-shrink:0;align-items:center">
+                  ${m.fee ? `<span style="font-family:var(--mono);font-size:.72rem;color:var(--muted)">${m.fee} fee</span>` : ''}
+                  ${m.wishlist > 0 ? `<span style="font-size:.68rem;color:#818cf8;font-family:var(--mono)">${m.wishlist} wishlist items</span>` : ''}
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
       `;
     }
 
@@ -1859,7 +2060,7 @@
       `;
     }
 
-    const renderers = { dashboard: renderDashboard, fleet: renderFleet, inventory: renderInventory, jobs: renderJobs };
+    const renderers = { dashboard: renderDashboard, fleet: renderFleet, inventory: renderInventory, jobs: renderJobs, parts: renderParts, hardware: renderHardware, reports: renderReports, markets: renderMarkets };
     let activeTab = 'dashboard';
 
     function animateBars(container) {
@@ -1903,7 +2104,7 @@
         entries.forEach(function(entry) {
           if (entry.isIntersecting && !entry.target.dataset.cycled) {
             entry.target.dataset.cycled = '1';
-            var tabs = ['dashboard', 'fleet', 'inventory', 'jobs'];
+            var tabs = ['dashboard', 'inventory', 'fleet', 'jobs', 'parts', 'hardware', 'reports', 'markets'];
             var i = 0;
             var cycle = setInterval(function() {
               i++;
