@@ -1623,6 +1623,26 @@
     if (e.key === 'Escape') closeModal();
   });
 
+  // Footer panels
+  function togglePanel(name) {
+    var panels = { privacy: document.getElementById('privacyPanel'), terms: document.getElementById('termsPanel') };
+    var links = { privacy: document.getElementById('privacyLink'), terms: document.getElementById('termsLink') };
+    var panel = panels[name];
+    var link = links[name];
+    var isOpen = panel.classList.contains('open');
+
+    // Close all panels and deactivate all links
+    Object.values(panels).forEach(function(p) { p.classList.remove('open'); });
+    Object.values(links).forEach(function(l) { l.classList.remove('active'); });
+
+    // If panel was closed, open it
+    if (!isOpen) {
+      panel.classList.add('open');
+      link.classList.add('active');
+      setTimeout(function() { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+    }
+  }
+
   // Cycling headline
   const cycleWords = ['print farm.', 'inventory.', 'printers.', 'filament.', 'jobs.'];
   let cycleIdx = 0;
