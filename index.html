@@ -467,6 +467,26 @@
   .modal-close:hover { color: var(--text); }
   .modal iframe { display: block; width: 100%; border: none; border-radius: 4px; }
 
+  /* FOOTER PANELS */
+  .footer-panel { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; background: var(--card); border-top: 1px solid var(--border); }
+  .footer-panel.open { max-height: 3000px; }
+  .footer-panel-inner { max-width: 860px; margin: 0 auto; padding: 3rem 2rem 3.5rem; position: relative; }
+  .footer-panel-close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; cursor: pointer; color: var(--muted); font-size: 1.25rem; line-height: 1; padding: .25rem .5rem; border-radius: 4px; transition: color .2s; }
+  .footer-panel-close:hover { color: var(--text); }
+  .footer-panel h2 { font-family: var(--display); font-size: 1.4rem; font-weight: 600; margin-bottom: .4rem; color: var(--text); }
+  .footer-panel .panel-date { font-size: .78rem; color: var(--muted); margin-bottom: 1.75rem; display: block; }
+  .footer-panel h3 { font-family: var(--display); font-size: .95rem; font-weight: 600; margin: 1.75rem 0 .5rem; color: var(--text); }
+  .footer-panel p { color: var(--muted); font-size: .875rem; line-height: 1.75; margin-bottom: .75rem; }
+  .footer-panel ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+  .footer-panel ul li { color: var(--muted); font-size: .875rem; line-height: 1.75; margin-bottom: .25rem; }
+  .footer-panel blockquote { border-left: 3px solid var(--blue); padding: .25rem 0 .25rem 1rem; margin: 0 0 1.25rem; }
+  .footer-panel blockquote p { margin-bottom: 0; font-style: italic; }
+  .footer-panel table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; font-size: .825rem; }
+  .footer-panel th { color: var(--muted); text-align: left; padding: .5rem .75rem; border-bottom: 1px solid var(--border); font-weight: 500; font-size: .775rem; text-transform: uppercase; letter-spacing: .04em; }
+  .footer-panel td { color: var(--text); padding: .5rem .75rem; border-bottom: 1px solid rgba(255,255,255,.04); vertical-align: top; }
+  .footer-panel td:first-child { white-space: nowrap; font-weight: 500; }
+  .footer-links a.active { color: var(--text); }
+
   /* HERO DASHBOARD MOCK */
   .hero-visual { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; }
   .tablet-frame {
