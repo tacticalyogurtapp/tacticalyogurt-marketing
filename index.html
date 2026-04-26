@@ -1632,6 +1632,13 @@
     setTimeout(() => { window.location.href = url; }, 500);
   }
 
+  window.addEventListener('pageshow', function(e) {
+    const overlay = document.getElementById('pageTransition');
+    overlay.style.transition = 'none';
+    overlay.style.opacity = '0';
+    overlay.style.display = 'none';
+  });
+
   function openModal() {
     document.getElementById('modalBackdrop').classList.add('open');
     document.body.style.overflow = 'hidden';
