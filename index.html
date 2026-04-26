@@ -572,6 +572,9 @@
 </head>
 <body>
 
+<!-- PAGE TRANSITION OVERLAY -->
+<div id="pageTransition" style="display:none;position:fixed;inset:0;background:#0f0a1e;z-index:9999;opacity:0;transition:opacity .45s ease;pointer-events:none;"></div>
+
 <!-- HEX GRID BACKGROUND -->
 <div class="page-hex-bg"></div>
 
@@ -599,6 +602,7 @@
     <li><a href="#compare">Compare Plans</a></li>
   </ul>
   <div class="nav-divider"></div>
+  <a href="https://app.tacticalyogurt.com" class="nav-cta" onclick="event.preventDefault(); fadeToApp('https://app.tacticalyogurt.com')">Log In</a>
   <a href="#" class="nav-cta-outline" onclick="event.preventDefault(); openModal()">Contact Us</a>
   <a href="#pricing" class="nav-cta">Get Started</a>
   <!-- Mobile hamburger -->
@@ -616,6 +620,7 @@
   <a href="#integrations" onclick="closeMenu()">Integrations</a>
   <a href="#pricing" onclick="closeMenu()">Pricing</a>
   <a href="#compare" onclick="closeMenu()">Compare Plans</a>
+  <a href="https://app.tacticalyogurt.com" class="nav-cta" onclick="event.preventDefault(); fadeToApp('https://app.tacticalyogurt.com')">Log In</a>
   <a href="#" class="nav-cta-outline" onclick="closeMenu(); openModal()">Contact Us</a>
   <a href="#pricing" class="nav-cta" onclick="closeMenu()">Get Started</a>
 </div>
@@ -1618,6 +1623,15 @@
   });
 
   // Modal
+  function fadeToApp(url) {
+    const overlay = document.getElementById('pageTransition');
+    overlay.style.display = 'block';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => { overlay.style.opacity = '1'; });
+    });
+    setTimeout(() => { window.location.href = url; }, 500);
+  }
+
   function openModal() {
     document.getElementById('modalBackdrop').classList.add('open');
     document.body.style.overflow = 'hidden';
