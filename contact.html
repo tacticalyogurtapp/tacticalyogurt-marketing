@@ -464,6 +464,11 @@
     document.body.style.opacity = '0';
     setTimeout(() => window.location.href = url, 300);
   }
+
+  window.addEventListener('pageshow', function(e) {
+    document.body.style.transition = 'none';
+    document.body.style.opacity = '1';
+  });
 </script>
 </body>
 </html>
