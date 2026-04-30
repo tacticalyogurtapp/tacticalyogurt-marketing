@@ -607,7 +607,7 @@
   </ul>
   <div class="nav-divider"></div>
   <a href="https://app.tacticalyogurt.com" class="nav-cta" onclick="event.preventDefault(); fadeToApp('https://app.tacticalyogurt.com')">Log In</a>
-  <a href="contact.html" class="nav-cta-outline">Contact Us</a>
+  <a href="#" class="nav-cta-outline" onclick="event.preventDefault(); openModal()">Contact Us</a>
   <a href="#pricing" class="nav-cta">Get Started</a>
   <!-- Mobile hamburger -->
   <div class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -625,7 +625,7 @@
   <a href="#pricing" onclick="closeMenu()">Pricing</a>
   <a href="#compare" onclick="closeMenu()">Compare Plans</a>
   <a href="https://app.tacticalyogurt.com" class="nav-cta" onclick="event.preventDefault(); fadeToApp('https://app.tacticalyogurt.com')">Log In</a>
-  <a href="contact.html" class="nav-cta-outline" onclick="closeMenu()">Contact Us</a>
+  <a href="#" class="nav-cta-outline" onclick="closeMenu(); openModal()">Contact Us</a>
   <a href="#pricing" class="nav-cta" onclick="closeMenu()">Get Started</a>
 </div>
 
@@ -720,7 +720,7 @@
       <h1>Command your<br><span class="hero-cycling">print farm.</span><br>Not your spreadsheets.</h1>
       <p class="hero-sub">Track every spool, manage every printer, fulfill every order — from one dashboard built for serious makers.</p>
       <div class="hero-actions">
-        <a href="contact.html" class="btn-primary">Join the Waitlist</a>
+        <a href="#" class="btn-primary" onclick="event.preventDefault(); openModal()">Join the Waitlist</a>
         <a href="#how-it-works" class="btn-ghost">See how it works →</a>
       </div>
       <div class="hero-stats">
@@ -1066,7 +1066,7 @@
         <li>Dashboard & auto tasks</li>
         <li>Mobile PWA</li>
       </ul>
-      <a href="contact.html" class="pbtn out">Join the Waitlist</a>
+      <a href="#" class="pbtn out" onclick="event.preventDefault(); openModal()">Join the Waitlist</a>
     </div>
 
     <!-- Operator -->
@@ -1084,7 +1084,7 @@
         <li>Order & customer management</li>
         <li>Basic reports</li>
       </ul>
-      <a href="contact.html" class="pbtn sol">Get Notified at Launch</a>
+      <a href="#" class="pbtn sol" onclick="event.preventDefault(); openModal()">Get Notified at Launch</a>
     </div>
 
     <!-- Studio -->
@@ -1102,7 +1102,7 @@
         <li>Role-based access control</li>
         <li>Audit trail & AES-256 security</li>
       </ul>
-      <a href="contact.html" class="pbtn out">Get Notified at Launch</a>
+      <a href="#" class="pbtn out" onclick="event.preventDefault(); openModal()">Get Notified at Launch</a>
     </div>
 
   </div>
@@ -1425,9 +1425,9 @@
           <!-- CTA ROW -->
           <tr class="cta-row">
             <td></td>
-            <td><a href="contact.html" class="pbtn out" style="display:block;text-align:center;font-size:.8rem;padding:.6rem;">Join the Waitlist</a></td>
-            <td class="col-featured"><a href="contact.html" class="pbtn sol" style="display:block;text-align:center;font-size:.8rem;padding:.6rem;">Get Notified</a></td>
-            <td><a href="contact.html" class="pbtn out" style="display:block;text-align:center;font-size:.8rem;padding:.6rem;">Get Notified</a></td>
+            <td><a href="#" class="pbtn out" style="display:block;text-align:center;font-size:.8rem;padding:.6rem;" onclick="event.preventDefault(); openModal()">Join the Waitlist</a></td>
+            <td class="col-featured"><a href="#" class="pbtn sol" style="display:block;text-align:center;font-size:.8rem;padding:.6rem;" onclick="event.preventDefault(); openModal()">Get Notified</a></td>
+            <td><a href="#" class="pbtn out" style="display:block;text-align:center;font-size:.8rem;padding:.6rem;" onclick="event.preventDefault(); openModal()">Get Notified</a></td>
           </tr>
 
         </tbody>
@@ -1441,7 +1441,7 @@
   <div class="cta-banner">
     <h2 class="cta-title">Your filament won't track itself.</h2>
     <p class="cta-sub">Join the waitlist — be first in line when we launch, and your print farm deserves better than a spreadsheet named "FINAL_v3_ACTUAL_FINAL.xlsx".</p>
-    <a href="contact.html" class="btn-primary">Join the Waitlist</a>
+    <a href="#" class="btn-primary" onclick="event.preventDefault(); openModal()">Join the Waitlist</a>
   </div>
 </div>
 
